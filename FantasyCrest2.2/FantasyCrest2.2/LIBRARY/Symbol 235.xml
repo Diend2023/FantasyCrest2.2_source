@@ -1,0 +1,50 @@
+<DOMSymbolItem xmlns="http://ns.adobe.com/xfl/2008/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Symbol 235" itemID="6aa54f00-00000094" lastModified="1789218419">
+     <timeline>
+          <DOMTimeline name="Symbol 235">
+               <layers>
+                    <DOMLayer name="Layer 1" color="#46d6fd" current="true" isSelected="true">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements>
+                                        <DOMShape isFloating="true">
+                                             <fills>
+                                                  <FillStyle index="1">
+                                                       <LinearGradient>
+                                                            <matrix>
+                                                                 <Matrix tx="256.65" ty="40.0" a="0.0" d="0.0" b="-0.0834808349609375" c="0.0350341796875"/>
+                                                            </matrix>
+                                                            <GradientEntry color="#0099ff" ratio="0.0"/>
+                                                            <GradientEntry color="#95ccff" ratio="1.0"/>
+                                                       </LinearGradient>
+                                                  </FillStyle>
+                                             </fills>
+                                             <strokes/>
+                                             <edges>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 4806 16[ 4781 30 4766 56[ 4751 83 4751 111[ 4751 140 4766 165[ 4781 190 4806 204[ 4830 218 4859 218[ 4887 218 4913 204[ 4938 190 4952 165[ 4966 140 4967 111[ 4967 82 4952 56[ 4937 30 4911 17[ 4886 3 4859 3[ 4831 3 4806 16"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 4751 375| 4925 375| 4989 238| 4740 238| 4716 20| 4511 20| 4537 238| 4434 238| 4434 375| 4549 375| 4587 766| 4427 1007| 4610 1007| 4626 1168| 4946 1168| 5028 1023| 4815 1023| 4789 758| 5004 431| 4809 430| 4763 499| 4751 375"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 3827 1165| 4198 1165| 4397 1011| 4397 481| 4127 481| 4127 241| 4356 241| 4416 105| 4127 105| 4127 12| 3929 12| 3929 481| 3827 481| 3827 1165"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 3525 433| 3628 433| 3722 51| 3572 51| 3525 256| 3525 11| 3361 11| 3361 1165| 3653 1165| 3714 1029| 3525 1029| 3525 651| 3567 913| 3718 913| 3639 490| 3525 490| 3525 433"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 4199 1027| 4024 1027| 4024 621| 4199 621| 4199 1027"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 3147 1029| 2969 1029| 2969 1165| 3149 1165| 3311 1015| 3311 11| 3147 11| 3147 256| 3113 51| 2962 51| 3035 433| 3147 433| 3147 490| 3031 490| 2955 913| 3107 913| 3147 665| 3147 1029"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 2711 257| 2711 466| 2557 884| 2711 884| 2711 1035| 2601 1035| 2601 1168| 2718 1168| 2880 1016| 2880 541| 2947 362| 2880 362| 2880 257| 2906 257| 2962 116| 2880 116| 2880 14| 2711 14| 2711 116| 2587 116| 2587 257| 2711 257"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 2053 437| 2053 801| 1776 801| 1776 936| 2006 937| 1767 1162| 1996 1162| 2142 1025| 2246 1162| 2447 1163| 2273 936| 2377 936| 2438 801| 2229 801| 2229 437| 2053 437"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 1999 51| 1776 51| 1776 181| 1999 181| 1999 270| 1771 270| 1771 405| 2262 405| 2262 656| 2428 589| 2428 270| 2172 270| 2172 181| 2370 181| 2435 51| 2172 51| 2172 7| 1999 7| 1999 51"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 1922 458| 1753 458| 1861 600| 2031 600| 1922 458"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 1476 1| 1293 341| 1292 534| 1440 534| 1294 778| 1292 905| 1691 906| 1760 766| 1503 768| 1764 283| 1572 283| 1510 393| 1462 393| 1677 1| 1476 1"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 1929 623| 1764 623| 1861 764| 2032 764| 1929 623"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 1287 1020| 1287 1159| 1681 1158| 1751 1020| 1287 1020"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 983 258| 1114 258| 1148 11| 1017 11| 983 258"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 971 435| 1089 435| 1151 303| 971 303| 971 0| 817 0| 817 303| 651 303| 651 435| 817 435| 817 501| 686 501| 637 944| 768 944| 817 519| 817 971| 971 900| 971 519| 1019 944| 1150 944| 1102 501| 971 501| 971 435"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 639 11| 673 258| 804 258| 771 11| 639 11"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 458 1156| 1095 1157| 1158 1019| 624 1019| 626 10| 457 10| 457 259| 281 259| 221 378| 174 378| 359 9| 160 9| 0 341| 0 519| 151 519| 15 786| 14 907| 369 908| 437 766| 221 768| 457 278| 458 1156"/>
+                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="0" edges="! 4 1015| 4 1157| 367 1156| 437 1015| 4 1015"/>
+                                             </edges>
+                                        </DOMShape>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+               </layers>
+          </DOMTimeline>
+     </timeline>
+</DOMSymbolItem>

@@ -1,0 +1,56 @@
+<DOMSymbolItem xmlns="http://ns.adobe.com/xfl/2008/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Symbol 325" itemID="6aa54f00-000000c6" lastModified="1789218419" linkageClassName="KeyMain" linkageExportForAS="true">
+     <timeline>
+          <DOMTimeline name="Symbol 325">
+               <layers>
+                    <DOMLayer name="Layer 1" color="#fb38b2">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="Symbol 324" name="YaoGan" centerPoint3DX="194.8" centerPoint3DY="281.5">
+                                             <matrix>
+                                                  <Matrix tx="119.8" ty="206.5"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+                    <DOMLayer name="Layer 2" color="#61fceb">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="Symbol 322" name="key3" centerPoint3DX="531.0" centerPoint3DY="387.2">
+                                             <matrix>
+                                                  <Matrix tx="378.75" ty="314.5"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+                    <DOMLayer name="Layer 3" color="#a935bf" current="true" isSelected="true">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="Symbol 321" name="key1" centerPoint3DX="157.55" centerPoint3DY="46.2">
+                                             <matrix>
+                                                  <Matrix tx="11.8" ty="12.0"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+               </layers>
+          </DOMTimeline>
+     </timeline>
+</DOMSymbolItem>

@@ -1,0 +1,161 @@
+<DOMSymbolItem xmlns="http://ns.adobe.com/xfl/2008/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Symbol 204" itemID="6aa54f00-00000082" lastModified="1789218419" symbolType="button">
+     <timeline>
+          <DOMTimeline name="Symbol 204" currentFrame="0">
+               <layers>
+                    <DOMLayer name="Layer 1" color="#cca8bf">
+                         <frames>
+                              <DOMFrame index="1" duration="1" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                              <DOMFrame index="2" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="Symbol 201" centerPoint3DX="336.95" centerPoint3DY="116.95">
+                                             <matrix>
+                                                  <Matrix tx="181.55" ty="81.5"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                             <color>
+                                                  <Color/>
+                                             </color>
+                                             <filters>
+                                                  <GlowFilter blurX="15" blurY="15" color="#ff0000" quality="1" strength="1"/>
+                                             </filters>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+                    <DOMLayer name="Layer 2" color="#10f3b7">
+                         <frames/>
+                    </DOMLayer>
+                    <DOMLayer name="Layer 3" color="#95d9cf">
+                         <frames>
+                              <DOMFrame index="1" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="Symbol 201" centerPoint3DX="336.95" centerPoint3DY="116.95">
+                                             <matrix>
+                                                  <Matrix tx="181.55" ty="81.5"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                             <color>
+                                                  <Color/>
+                                             </color>
+                                             <filters>
+                                                  <GlowFilter blurX="15" blurY="15" color="#ff0000" quality="1" strength="1"/>
+                                             </filters>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                              <DOMFrame index="2" duration="1" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                              <DOMFrame index="3" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="Symbol 201" centerPoint3DX="336.95" centerPoint3DY="116.95">
+                                             <matrix>
+                                                  <Matrix tx="181.55" ty="81.5"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                             <color>
+                                                  <Color/>
+                                             </color>
+                                             <filters>
+                                                  <GlowFilter blurX="15" blurY="15" color="#ff0000" quality="1" strength="1"/>
+                                             </filters>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                              <DOMFrame index="4" keyMode="9728">
+                                   <elements>
+                                        <DOMShape isFloating="true">
+                                             <fills>
+                                                  <FillStyle index="1">
+                                                       <LinearGradient>
+                                                            <matrix>
+                                                                 <Matrix tx="290.6" ty="138.85" a="0.0" d="0.0" b="0.0406341552734375" c="-0.041961669921875"/>
+                                                            </matrix>
+                                                            <GradientEntry color="#ffd400" ratio="0.0"/>
+                                                            <GradientEntry color="#ff6f1d" ratio="1.0"/>
+                                                       </LinearGradient>
+                                                  </FillStyle>
+                                             </fills>
+                                             <strokes/>
+                                             <edges>
+                                                  <Edge fillStyle0="0" fillStyle1="1" strokeStyle="0" edges="! 9366 2070[ 9453 2084 9445 2107[ 9430 2137 9425 2194[ 9421 2251 9428 2332[ 9437 2501 9451 2542| 9455 2550| 9569 2502[ 9660 2448 9669 2470| 9687 2534[ 9697 2575 9650 2600[ 9582 2648 9473 2699| 9474 2717[ 9479 2798 9512 2914[ 9551 2866 9576 2813[ 9602 2761 9616 2702[ 9621 2675 9680 2702[ 9737 2731 9727 2740[ 9709 2754 9650 2865[ 9605 2945 9541 3003| 9561 3054[ 9586 3121 9623 3173[ 9662 3226 9712 3265| 9794 3322[ 9826 3340 9841 3336[ 9859 3336 9867 3300[ 9875 3266 9873 3195[ 9863 3057 9841 2984[ 9830 2950 9853 2971[ 9898 3067 9928 3153[ 9959 3243 9973 3325[ 10002 3489 9990 3486[ 9911 3471 9834 3436[ 9759 3403 9687 3352[ 9618 3302 9564 3231[ 9509 3159 9468 3064[ 9393 3121 9396 3152[ 9396 3192 9372 3200[ 9259 3257 9210 3270| 9057 3276[ 9018 3272 9053 3247| 9232 3153[ 9311 3106 9364 3064| 9441 2995[ 9413 2918 9378 2740[ 9305 2778 9291 2806[ 9283 2823 9265 2808[ 9245 2793 9218 2748[ 9158 2662 9187 2662| 9358 2595[ 9346 2528 9346 2481| 9308 2121[ 9292 2088 9307 2076[ 9320 2064 9366 2070"/>
+                                                  <Edge fillStyle0="0" fillStyle1="1" strokeStyle="0" edges="! 9697 2250[ 9713 2286 9743 2310| 9786 2360[ 9795 2371 9780 2396[ 9762 2418 9720 2414| 9648 2411[ 9619 2411 9615 2395[ 9594 2352 9587 2317[ 9580 2282 9587 2253[ 9602 2208 9621 2196[ 9640 2183 9663 2201[ 9677 2211 9697 2250"/>
+                                                  <Edge fillStyle0="0" fillStyle1="1" strokeStyle="0" edges="! 8822 2325[ 8807 2286 8824 2275[ 8841 2263 8889 2276[ 8935 2291 8953 2306[ 8970 2321 8961 2337[ 8951 2352 8941 2505| 8980 2504| 9123 2459[ 9145 2450 9158 2497[ 9167 2544 9149 2552| 9013 2600[ 8967 2617 8935 2654[ 8930 2754 8937 2789| 9065 2793[ 9141 2818 9173 2839[ 9204 2858 9190 2871[ 9169 2882 9148 2913| 9105 2993[ 9059 3096 9059 3136[ 9059 3161 9034 3161| 8881 3168[ 8816 3177 8772 3200[ 8752 3209 8752 3193| 8727 3146[ 8678 3086 8651 3020[ 8625 2954 8622 2886[ 8600 2864 8630 2856[ 8656 2858 8812 2812| 8823 2494[ 8827 2358 8822 2325"/>
+                                                  <Edge fillStyle0="0" fillStyle1="1" strokeStyle="0" edges="! 8998 2969[ 9008 2929 8981 2888[ 8971 2872 8942 2870| 8868 2876[ 8774 2898 8754 2923[ 8737 2972 8746 3011[ 8755 3050 8787 3078| 8857 3071[ 8912 3063 8940 3050[ 8987 3010 8998 2969"/>
+                                                  <Edge fillStyle0="0" fillStyle1="1" strokeStyle="0" edges="! 7962 2086[ 7984 2078 8036 2093[ 8085 2107 8101 2121[ 8117 2136 8101 2150[ 8084 2169 8075 2253[ 8066 2336 8063 2485| 8062 2518[ 8134 2495 8237 2479[ 8273 2470 8277 2494[ 8277 2521 8306 2537[ 8326 2560 8337 2618[ 8339 2646 8326 2653[ 8313 2660 8285 2643[ 8168 2604 8065 2643| 8062 2643[ 8068 3044 8080 3311[ 8080 3410 8085 3441[ 8085 3472 8039 3447[ 7924 3414 7823 3362[ 7719 3308 7630 3236[ 7559 3182 7625 3201[ 7721 3250 7796 3265| 7929 3261[ 7943 3254 7949 3210[ 7955 3167 7954 3085| 7951 2670| 7873 2678[ 7756 2693 7701 2717[ 7641 2754 7636 2710| 7618 2627[ 7605 2592 7641 2596| 7809 2586| 7951 2550| 7946 2121[ 7939 2093 7962 2086"/>
+                                                  <Edge fillStyle0="0" fillStyle1="1" strokeStyle="0" edges="! 7097 2513[ 7151 2501 7291 2422[ 7359 2383 7407 2368| 7491 2363| 7570 2401[ 7616 2430 7599 2453[ 7573 2481 7553 2525[ 7532 2571 7517 2632[ 7474 2763 7441 2815| 7559 2918[ 7573 2930 7549 3007[ 7521 3088 7500 3093[ 7470 3100 7463 3075| 7433 3011| 7361 2917| 7280 2995[ 7244 3029 7236 3065[ 7220 3099 7173 3113[ 7123 3130 7080 3132| 6959 3126[ 6921 3110 7009 3083| 7148 2995[ 7224 2939 7277 2868| 7303 2835| 7190 2689[ 7168 2663 7213 2665| 7354 2754| 7412 2624[ 7432 2557 7434 2520[ 7437 2484 7422 2476[ 7392 2464 7320 2511[ 7251 2554 7218 2601[ 7194 2639 7168 2639[ 7141 2639 7112 2598[ 7083 2561 7079 2540[ 7075 2519 7097 2513"/>
+                                                  <Edge fillStyle0="0" fillStyle1="1" strokeStyle="0" edges="! 7863 2865[ 7873 2875 7848 2939[ 7823 3006 7801 3006[ 7776 3011 7772 2990| 7752 2932| 7676 2793[ 7655 2765 7697 2775[ 7789 2812 7863 2865"/>
+                                                  <Edge fillStyle0="0" fillStyle1="1" strokeStyle="0" edges="! 6140 2416[ 6087 2448 6037 2531| 5980 2618[ 6073 2743 6166 2835[ 6255 2925 6335 2987[ 6416 3050 6489 3088[ 6561 3123 6749 3189[ 6823 3221 6828 3236[ 6828 3250 6791 3261| 6601 3271[ 6499 3266 6386 3241[ 6359 3243 6344 3222[ 6330 3201 6329 3157[ 6326 3112 6305 3079[ 6283 3044 6242 3021[ 6200 2999 6156 2962[ 6112 2925 6068 2873[ 6029 2830 5978 2808[ 5929 2786 5869 2786| 5839 2832[ 5762 2942 5676 3036[ 5588 3132 5491 3212[ 5423 3258 5394 3249[ 5359 3239 5416 3187[ 5758 2789 5868 2587[ 5937 2453 5987 2317[ 5993 2286 6012 2282[ 6030 2278 6063 2302| 6156 2369[ 6181 2390 6140 2416"/>
+                                                  <Edge fillStyle0="0" fillStyle1="1" strokeStyle="0" edges="! 4842 2257[ 4891 2267 4958 2308[ 4990 2329 4994 2345[ 4997 2361 4972 2372[ 4929 2392 4896 2438[ 4864 2484 4841 2557| 4737 2854| 4727 2868| 4798 2976| 4868 3054[ 4909 3093 4981 3132[ 5059 3174 5175 3262[ 5219 3293 5215 3300| 5106 3304[ 5023 3294 4942 3269[ 4857 3243 4775 3201[ 4743 3182 4748 3168| 4759 3129[ 4755 3075 4737 3027[ 4719 2979 4689 2936[ 4551 3144 4305 3233[ 4253 3253 4209 3241[ 4162 3232 4204 3215[ 4259 3192 4310 3161[ 4362 3129 4409 3088| 4500 2997| 4583 2889| 4607 2850[ 4526 2771 4514 2731[ 4498 2682 4444 2667[ 4406 2655 4403 2626[ 4400 2598 4431 2555[ 4486 2471 4508 2526[ 4505 2575 4552 2606[ 4591 2639 4662 2757[ 4711 2665 4764 2523[ 4780 2453 4776 2416[ 4773 2379 4751 2375[ 4718 2373 4667 2389| 4551 2438[ 4531 2446 4503 2412[ 4468 2382 4501 2371| 4687 2285[ 4737 2261 4776 2254| 4842 2257"/>
+                                                  <Edge fillStyle0="0" fillStyle1="1" strokeStyle="0" edges="! 3998 2554[ 4102 2618 4198 2689[ 4241 2593 4253 2529[ 4264 2466 4242 2433[ 4234 2423 4169 2453[ 4098 2479 4091 2494[ 4076 2514 4059 2508[ 4043 2502 4025 2468[ 3980 2404 4025 2400| 4301 2300| 4384 2314[ 4421 2323 4426 2338[ 4430 2353 4404 2374[ 4383 2404 4369 2447| 4348 2545[ 4341 2584 4319 2633| 4263 2739| 4398 2865[ 4412 2875 4390 2948[ 4365 3024 4344 3029[ 4316 3036 4309 3014| 4282 2954| 4193 2843| 4183 2856[ 4162 2882 4157 2918[ 4151 2954 4159 3001[ 4162 3025 4141 3050[ 4121 3075 4078 3100[ 3934 3166 3816 3200[ 3742 3217 3807 3166[ 3919 3078 4000 2991[ 4080 2905 4129 2822| 4149 2786| 3976 2575[ 3961 2549 3998 2554"/>
+                                             </edges>
+                                        </DOMShape>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+                    <DOMLayer name="Layer 4" current="true" isSelected="true" color="#8365bc">
+                         <frames>
+                              <DOMFrame index="1" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="Symbol 199" symbolType="graphic" loop="loop">
+                                             <matrix>
+                                                  <Matrix tx="0.0" ty="0.0"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                             <color>
+                                                  <Color alphaMultiplier="0.5"/>
+                                             </color>
+                                             <filters/>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                              <DOMFrame index="2" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="Symbol 203" centerPoint3DX="339.15" centerPoint3DY="90.5">
+                                             <matrix>
+                                                  <Matrix tx="0.0" ty="0.0"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                             <color>
+                                                  <Color/>
+                                             </color>
+                                             <filters/>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                              <DOMFrame index="3" duration="2" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="Symbol 199" symbolType="graphic" loop="loop">
+                                             <matrix>
+                                                  <Matrix tx="0.0" ty="0.0"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                             <color>
+                                                  <Color alphaMultiplier="0.5"/>
+                                             </color>
+                                             <filters/>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+               </layers>
+          </DOMTimeline>
+     </timeline>
+</DOMSymbolItem>
