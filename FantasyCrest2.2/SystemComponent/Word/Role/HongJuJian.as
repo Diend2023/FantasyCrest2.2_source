@@ -150,9 +150,10 @@ package SystemComponent.Word.Role
          var _loc3_:String = param1.$keyString.substring(param1.$keyString.length - 2,param1.$keyString.length);
          var _loc4_:int = 0;
          loop0:
-         while(true)
-         {
-            if(_loc4_ <= 1)
+         // while(true)
+         // {
+            // if(_loc4_ <= 1)
+            for(; _loc4_ <= 1; _loc3_ = _loc3_.charAt(1),_loc4_++) //
             {
                switch(param2)
                {
@@ -208,7 +209,7 @@ package SystemComponent.Word.Role
                      continue;
                }
             }
-            addr0281:
+            // addr0281:
             switch(param2)
             {
                case Keyboard.J:
@@ -228,14 +229,14 @@ package SystemComponent.Word.Role
                default:
                   return "none";
             }
-            _loc3_ = _loc3_.charAt(1);
-            _loc4_++;
-         }
-         var _loc5_:String = _loc3_;
-         switch(0)
-         {
-         }
-         §§goto(addr0281);
+         //    _loc3_ = _loc3_.charAt(1);
+         //    _loc4_++;
+         // }
+         // var _loc5_:String = _loc3_;
+         // switch(0)
+         // {
+         // }
+         // §§goto(addr0281);
       }
       
       public static function getKeyJumpString(param1:SystemGameRole, param2:int = 0) : String

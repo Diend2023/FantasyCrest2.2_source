@@ -971,7 +971,11 @@ package SystemComponent.Word.Role
                   param1.$frameInt = 2;
                }
                param1.$y += FrameMath.mathFrameToX(param1.$frameInt,1,5,8 + param1.$ob["LongZuiShan"]);
-               ++param1.$ob["LongZuiShan"];
+               // ++param1.$ob["LongZuiShan"];
+               var _loc1_:* = param1.$ob; //
+               var _loc2_:* = "LongZuiShan"; //
+               var _loc3_:* = _loc1_[_loc2_] + 1; //
+               _loc1_[_loc2_] = _loc3_; //
          }
          param1.$skillFrameInt = param1.$frameInt;
       }

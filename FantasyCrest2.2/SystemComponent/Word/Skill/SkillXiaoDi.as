@@ -294,7 +294,11 @@ package SystemComponent.Word.Skill
                      {
                         param1.$y -= 6;
                      }
-                     --param2.$ob["key"];
+                     // --param2.$ob["key"];
+                     var _loc5_:* = param2.$ob; //
+                     var _loc6_:* = "key"; //
+                     var _loc7_:* = _loc5_[_loc6_] - 1; //
+                     _loc5_[_loc6_] = _loc7_; //
                      if(param1.$key == param1.$keyArray[4] && param2.$ob["key"] <= 0)
                      {
                         param2.$ob["key"] = 40;

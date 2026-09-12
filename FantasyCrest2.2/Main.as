@@ -1,4 +1,4 @@
-package
+﻿package
 {
    import SystemComponent.GameHelp;
    import SystemComponent.HD.DanMu.DanMu;
@@ -531,7 +531,7 @@ package
       {
          var _loc1_:* = null;
          stage.frameRate = 32;
-         if(SwfRestrict.asWeb(stage.loaderInfo.url,true))
+         if(SwfRestrict.asWeb(stage.loaderInfo.url,false))
          {
             this.setSystemRole();
             this.setSystemSkill();

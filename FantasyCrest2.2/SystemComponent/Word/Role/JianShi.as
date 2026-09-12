@@ -149,9 +149,10 @@ package SystemComponent.Word.Role
          var _loc3_:String = param1.$keyString.substring(param1.$keyString.length - 2,param1.$keyString.length);
          var _loc4_:int = 0;
          loop0:
-         while(true)
-         {
-            if(_loc4_ <= 1)
+         // while(true)
+         // {
+            // if(_loc4_ <= 1)
+            for(; _loc4_ <= 1; _loc3_ = _loc3_.charAt(1),_loc4_++) //
             {
                switch(param2)
                {
@@ -164,7 +165,8 @@ package SystemComponent.Word.Role
                      {
                         case "S":
                      }
-                     continue;
+                     // continue;
+                     break; //
                   case Keyboard.U:
                      switch(_loc3_)
                      {
@@ -174,7 +176,8 @@ package SystemComponent.Word.Role
                            return "地拔";
                         case "SS":
                      }
-                     continue;
+                     // continue;
+                     break; //
                   case Keyboard.I:
                      switch(_loc3_)
                      {
@@ -185,8 +188,8 @@ package SystemComponent.Word.Role
                            return "上挑";
                         case "S":
                            return "地烂";
-                        default:
-                           continue;
+                        // default:
+                        //    continue;
                      }
                      break;
                   case Keyboard.O:
@@ -196,17 +199,17 @@ package SystemComponent.Word.Role
                            return "奥义光辉";
                         case "WW":
                            return "冰牙刃剑";
-                        default:
-                           continue;
+                        // default:
+                        //    continue;
                      }
                      break;
                   case Keyboard.P:
                      return "none";
-                  default:
-                     continue;
+                  // default:
+                  //    continue;
                }
             }
-            addr0298:
+            // addr0298:
             switch(param2)
             {
                case Keyboard.J:
@@ -226,14 +229,14 @@ package SystemComponent.Word.Role
                default:
                   return "none";
             }
-            _loc3_ = _loc3_.charAt(1);
-            _loc4_++;
-         }
-         var _loc5_:String = _loc3_;
-         switch(0)
-         {
-         }
-         §§goto(addr0298);
+         //    _loc3_ = _loc3_.charAt(1);
+         //    _loc4_++;
+         // }
+         // var _loc5_:String = _loc3_;
+         // switch(0)
+         // {
+         // }
+         // §§goto(addr0298);
       }
       
       public static function getKeyJumpString(param1:SystemGameRole, param2:int = 0) : String

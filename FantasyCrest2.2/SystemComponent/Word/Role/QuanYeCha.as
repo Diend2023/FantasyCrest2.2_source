@@ -151,22 +151,25 @@ package SystemComponent.Word.Role
          var _loc3_:String = param1.$keyString.substring(param1.$keyString.length - 2,param1.$keyString.length);
          var _loc4_:int = 0;
          loop0:
-         while(true)
+         // while(true)
+         for(; _loc4_ <= 1; _loc3_ = _loc3_.charAt(1),_loc4_++) //
          {
-            if(_loc4_ <= 1)
-            {
+            // if(_loc4_ <= 1)
+            // {
                switch(param2)
                {
                   case Keyboard.J:
                      continue;
                   case Keyboard.K:
-                     break loop0;
+                     // break loop0;
+                     return "none"; //
                   case Keyboard.L:
                      var _loc5_:String = _loc3_;
                      switch(0)
                      {
                      }
-                     break;
+                     // break;
+                     break loop0; //
                   case Keyboard.U:
                      switch(_loc3_)
                      {
@@ -222,9 +225,9 @@ package SystemComponent.Word.Role
                   return "none";
                default:
                   return "none";
-            }
-            _loc3_ = _loc3_.charAt(1);
-            _loc4_++;
+            // }
+            // _loc3_ = _loc3_.charAt(1);
+            // _loc4_++;
          }
          return "none";
       }

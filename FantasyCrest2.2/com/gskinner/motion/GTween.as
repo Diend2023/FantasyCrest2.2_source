@@ -1,758 +1,1 @@
-package com.gskinner.motion
-{
-   import flash.events.Event;
-   import flash.events.EventDispatcher;
-   import flash.events.IEventDispatcher;
-   import flash.utils.Dictionary;
-   
-   public class GTween extends EventDispatcher
-   {
-      
-      protected static var _timingMode:String;
-      
-      protected static var _activeTicker:ITicker;
-      
-      public static var defaultEase:Function;
-      
-      protected static var _timeInterval:uint = 40;
-      
-      protected static var activeTweens:Dictionary = new Dictionary();
-      
-      public static const TIME:String = "time";
-      
-      public static const FRAME:String = "frame";
-      
-      public static const HYBRID:String = "hybrid";
-      
-      public static const START:String = "start";
-      
-      public static const DELAY:String = "delay";
-      
-      public static const TWEEN:String = "tween";
-      
-      public static const END:String = "end";
-      
-      public static var pauseAll:Boolean = false;
-      
-      public static var rotationProperties:Object = {
-         "rotation":true,
-         "rotationX":true,
-         "rotationY":true,
-         "rotationZ":true
-      };
-      
-      public static var snappingProperties:Object = {
-         "x":true,
-         "y":true
-      };
-      
-      public var autoPlay:Boolean = true;
-      
-      public var autoRotation:Boolean = false;
-      
-      public var autoVisible:Boolean = true;
-      
-      public var data:*;
-      
-      public var duration:Number = 1;
-      
-      public var ease:Function = linearEase;
-      
-      public var nextTween:GTween;
-      
-      public var reflect:Boolean = false;
-      
-      public var repeat:int = 0;
-      
-      public var snapping:Boolean = false;
-      
-      protected var startValues:Object;
-      
-      protected var endValues:Object;
-      
-      protected var inited:Boolean;
-      
-      protected var inTick:Boolean;
-      
-      protected var ticker:ITicker;
-      
-      protected var positionOffset:Number;
-      
-      protected var assignmentTarget:Object;
-      
-      protected var assignmentProperty:String;
-      
-      protected var _position:Number = 0;
-      
-      protected var _previousPosition:Number;
-      
-      protected var _tweenPosition:Number = 0;
-      
-      protected var _previousTweenPosition:Number;
-      
-      protected var _target:Object;
-      
-      protected var _propertyTarget:Object;
-      
-      protected var _paused:Boolean = true;
-      
-      protected var _proxy:TargetProxy;
-      
-      protected var _delay:Number = 0;
-      
-      protected var _reversed:Boolean;
-      
-      protected var _lockStartProperties:Boolean;
-      
-      public function GTween(param1:Object = null, param2:Number = 10, param3:Object = null, param4:Object = null)
-      {
-         super();
-         this.ticker = activeTicker;
-         this.target = param1;
-         this.duration = param2;
-         this.ease = defaultEase || linearEase;
-         this.setProperties(param3);
-         this.setTweenProperties(param4);
-      }
-      
-      public static function get timingMode() : String
-      {
-         return _timingMode;
-      }
-      
-      public static function set timingMode(param1:String) : void
-      {
-         param1 = param1 == FRAME || param1 == TIME ? param1 : HYBRID;
-         if(param1 == _timingMode)
-         {
-            return;
-         }
-         _timingMode = param1;
-         if(_timingMode == TIME)
-         {
-            _activeTicker = new TimeTicker();
-            (_activeTicker as TimeTicker).interval = _timeInterval / 1000;
-         }
-         else if(_timingMode == FRAME)
-         {
-            _activeTicker = new FrameTicker();
-         }
-         else
-         {
-            _activeTicker = new HybridTicker();
-         }
-      }
-      
-      public static function get timeInterval() : uint
-      {
-         return _timeInterval;
-      }
-      
-      public static function set timeInterval(param1:uint) : void
-      {
-         _timeInterval = param1;
-         if(_activeTicker is TimeTicker)
-         {
-            (_activeTicker as TimeTicker).interval = _timeInterval / 1000;
-         }
-      }
-      
-      public static function get activeTicker() : ITicker
-      {
-         if(_timingMode == null)
-         {
-            timingMode = HYBRID;
-         }
-         return _activeTicker;
-      }
-      
-      public static function linearEase(param1:Number, param2:Number, param3:Number, param4:Number) : Number
-      {
-         return param1;
-      }
-      
-      public function get proxy() : Object
-      {
-         if(this._proxy == null)
-         {
-            this._proxy = new TargetProxy(this);
-         }
-         return this._proxy;
-      }
-      
-      public function get position() : Number
-      {
-         return this._position;
-      }
-      
-      public function set position(param1:Number) : void
-      {
-         this.setPosition(param1,true);
-      }
-      
-      public function get paused() : Boolean
-      {
-         return this._paused;
-      }
-      
-      public function set paused(param1:Boolean) : void
-      {
-         if(param1 == this._paused)
-         {
-            return;
-         }
-         this._paused = param1;
-         if(param1)
-         {
-            this.ticker.removeEventListener("tick",this.handleTick);
-         }
-         else
-         {
-            this.ticker.addEventListener("tick",this.handleTick,false,0,true);
-            if(this.repeat != -1 && this._position >= this.duration * (this.repeat + 1))
-            {
-               this.position = 0;
-            }
-            else
-            {
-               this.updatePositionOffset();
-            }
-         }
-         this.setGCLock(!param1);
-      }
-      
-      public function get tweenPosition() : Number
-      {
-         return this._tweenPosition;
-      }
-      
-      public function get target() : Object
-      {
-         return this._target;
-      }
-      
-      public function set target(param1:Object) : void
-      {
-         this._propertyTarget = this._target = param1 === null ? {} : param1;
-         this.inited = false;
-      }
-      
-      public function get propertyTarget() : Object
-      {
-         return this._propertyTarget;
-      }
-      
-      public function get reversed() : Boolean
-      {
-         return this._reversed;
-      }
-      
-      public function set reversed(param1:Boolean) : void
-      {
-         if(param1 == this._reversed)
-         {
-            return;
-         }
-         this._reversed = param1;
-         if(!this.inited)
-         {
-            this.init();
-         }
-         this.setPosition(this._position,true);
-      }
-      
-      public function get state() : String
-      {
-         return this._position == -this._delay && this._paused ? START : (this._position < 0 ? DELAY : (this.repeat != -1 && this._position >= (this.repeat + 1) * this.duration ? END : TWEEN));
-      }
-      
-      public function get delay() : Number
-      {
-         return this._delay;
-      }
-      
-      public function set delay(param1:Number) : void
-      {
-         if(this._position == -this._delay)
-         {
-            this.setPosition(-param1);
-         }
-         this._delay = param1;
-      }
-      
-      public function get lockStartProperties() : Boolean
-      {
-         return this._lockStartProperties;
-      }
-      
-      public function set lockStartProperties(param1:Boolean) : void
-      {
-         if(param1 && !this.inited)
-         {
-            this.init();
-         }
-         this._lockStartProperties = param1;
-      }
-      
-      public function setProperties(param1:Object) : void
-      {
-         var _loc2_:String = null;
-         this.endValues = {};
-         for(_loc2_ in param1)
-         {
-            this.setProperty(_loc2_,param1[_loc2_]);
-         }
-      }
-      
-      public function setProperty(param1:String, param2:Number) : void
-      {
-         if(isNaN(param2))
-         {
-            return;
-         }
-         this.endValues[param1] = param2;
-         if(this._lockStartProperties && this.startValues[param1] == null)
-         {
-            this.startValues[param1] = this._propertyTarget[param1];
-         }
-         this.invalidate();
-      }
-      
-      public function getProperty(param1:String) : Number
-      {
-         return this.endValues[param1];
-      }
-      
-      public function deleteProperty(param1:String) : Boolean
-      {
-         return delete this.endValues[param1];
-      }
-      
-      public function getProperties() : Object
-      {
-         return this.copyObject(this.endValues);
-      }
-      
-      public function setStartProperties(param1:Object) : void
-      {
-         this.startValues = this.copyObject(param1);
-         this.inited = true;
-      }
-      
-      public function getStartProperties() : Object
-      {
-         return this.copyObject(this.startValues);
-      }
-      
-      public function setTweenProperties(param1:Object) : void
-      {
-         var _loc2_:Number = NaN;
-         var _loc3_:String = null;
-         if(!param1)
-         {
-            return;
-         }
-         if("position" in param1)
-         {
-            _loc2_ = Number(param1.position);
-            delete param1.position;
-         }
-         if("initListener" in param1)
-         {
-            addEventListener(Event.INIT,param1.initListener,false,0,true);
-            delete param1.initListener;
-         }
-         if("completeListener" in param1)
-         {
-            addEventListener(Event.COMPLETE,param1.completeListener,false,0,true);
-            delete param1.completeListener;
-         }
-         if("changeListener" in param1)
-         {
-            addEventListener(Event.CHANGE,param1.changeListener,false,0,true);
-            delete param1.changeListener;
-         }
-         for(_loc3_ in param1)
-         {
-            this[_loc3_] = param1[_loc3_];
-         }
-         if(!isNaN(_loc2_))
-         {
-            this.position = _loc2_;
-         }
-      }
-      
-      public function reverse(param1:Boolean = true) : void
-      {
-         var _loc2_:Number = this.repeat == -1 ? this.duration - this._position % this.duration : (this.repeat + 1) * this.duration - this._position;
-         if(this.reflect)
-         {
-            this._reversed = this.position / this.duration % 2 >= 1 == _loc2_ / this.duration % 2 >= 1 != this._reversed;
-         }
-         else
-         {
-            this._reversed = !this._reversed;
-         }
-         this.setPosition(_loc2_,param1);
-      }
-      
-      public function invalidate() : void
-      {
-         this.inited = false;
-         if(this._position > 0)
-         {
-            this._position = 0;
-            this.updatePositionOffset();
-         }
-         if(this.autoPlay)
-         {
-            this.paused = false;
-         }
-      }
-      
-      public function pause() : void
-      {
-         this.paused = true;
-      }
-      
-      public function play() : void
-      {
-         this.paused = false;
-      }
-      
-      public function beginning() : void
-      {
-         this.setPosition(-this._delay);
-      }
-      
-      public function end() : void
-      {
-         this.setPosition(this.repeat == -1 ? this.duration : (this.repeat + 1) * this.duration);
-      }
-      
-      public function setAssignment(param1:Object = null, param2:String = null) : void
-      {
-         this.assignmentTarget = param1;
-         this.assignmentProperty = param2;
-         this.inited = false;
-      }
-      
-      public function setPosition(param1:Number, param2:Boolean = true) : void
-      {
-         var _loc4_:Number = NaN;
-         this._previousPosition = this._position;
-         this._position = param1;
-         if(!this.inTick && !this.paused)
-         {
-            this.updatePositionOffset();
-         }
-         var _loc3_:Number = (this.repeat + 1) * this.duration;
-         if(param1 < 0)
-         {
-            _loc4_ = this._reversed ? this.duration : 0;
-         }
-         else if(this.repeat == -1 || param1 < _loc3_)
-         {
-            _loc4_ = param1 % this.duration;
-            if((this.reflect && param1 / this.duration % 2 >= 1) != this._reversed)
-            {
-               _loc4_ = this.duration - _loc4_;
-            }
-         }
-         else
-         {
-            _loc4_ = (this.reflect && this.repeat % 2 >= 1) != this._reversed ? 0 : this.duration;
-         }
-         if(_loc4_ == this._tweenPosition)
-         {
-            return;
-         }
-         this._previousTweenPosition = this._tweenPosition;
-         this._tweenPosition = _loc4_;
-         if(!param2 && hasEventListener(Event.CHANGE))
-         {
-            dispatchEvent(new Event(Event.CHANGE));
-         }
-         if(!this.inited && this._previousPosition <= 0 && this._position >= 0)
-         {
-            this.init();
-            if(!param2 && hasEventListener(Event.INIT))
-            {
-               dispatchEvent(new Event(Event.INIT));
-            }
-         }
-         this.updateProperties();
-         if(this.repeat != -1 && this._previousPosition < _loc3_ && param1 >= _loc3_)
-         {
-            if(!param2 && hasEventListener(Event.COMPLETE))
-            {
-               dispatchEvent(new Event(Event.COMPLETE));
-            }
-            this.paused = true;
-            if(this.nextTween)
-            {
-               this.nextTween.paused = false;
-            }
-         }
-      }
-      
-      protected function init() : void
-      {
-         var _loc1_:String = null;
-         var _loc2_:Number = NaN;
-         var _loc3_:Number = NaN;
-         this.inited = true;
-         if(this._lockStartProperties)
-         {
-            return;
-         }
-         this.startValues = {};
-         if(Boolean(this.assignmentTarget) && Boolean(this.assignmentProperty))
-         {
-            this._propertyTarget = this.assignmentTarget[this.assignmentProperty];
-         }
-         for(_loc1_ in this.endValues)
-         {
-            if(this.autoRotation && Boolean(rotationProperties[_loc1_]))
-            {
-               _loc2_ = Number(this.endValues[_loc1_] = this.endValues[_loc1_] % 360);
-               _loc3_ = this._propertyTarget[_loc1_] % 360;
-               this.startValues[_loc1_] = _loc3_ + (Math.abs(_loc3_ - _loc2_) < 180 ? 0 : (_loc3_ > _loc2_ ? -360 : 360));
-            }
-            else
-            {
-               this.startValues[_loc1_] = this._propertyTarget[_loc1_];
-            }
-         }
-      }
-      
-      protected function updateProperties() : void
-      {
-         var _loc2_:String = null;
-         var _loc1_:Number = this.ease(this._tweenPosition / this.duration,0,1,1);
-         for(_loc2_ in this.endValues)
-         {
-            this.updateProperty(_loc2_,this.startValues[_loc2_],this.endValues[_loc2_],_loc1_);
-         }
-         if(this.autoVisible && "alpha" in this.endValues && "alpha" in this._propertyTarget && "visible" in this._propertyTarget)
-         {
-            this._propertyTarget.visible = this._propertyTarget.alpha > 0;
-         }
-         if(Boolean(this.assignmentTarget) && Boolean(this.assignmentProperty))
-         {
-            this.assignmentTarget[this.assignmentProperty] = this._propertyTarget;
-         }
-      }
-      
-      protected function updateProperty(param1:String, param2:Number, param3:Number, param4:Number) : void
-      {
-         var _loc5_:Number = param2 + (param3 - param2) * param4;
-         if(this.snapping && Boolean(snappingProperties[param1]))
-         {
-            _loc5_ = Math.round(_loc5_);
-         }
-         if(param1 == "currentFrame")
-         {
-            this._propertyTarget.gotoAndStop(_loc5_ << 0);
-         }
-         else
-         {
-            this._propertyTarget[param1] = _loc5_;
-         }
-      }
-      
-      protected function setGCLock(param1:Boolean) : void
-      {
-         if(param1)
-         {
-            if(this._target is IEventDispatcher)
-            {
-               this._target.addEventListener("GDS__NONEXISTENT_EVENT",this.nullListener,false,0,false);
-            }
-            else
-            {
-               activeTweens[this] = true;
-            }
-         }
-         else
-         {
-            if(this._target is IEventDispatcher)
-            {
-               this._target.removeEventListener("GDS__NONEXISTENT_EVENT",this.nullListener);
-            }
-            delete activeTweens[this];
-         }
-      }
-      
-      protected function copyObject(param1:Object) : Object
-      {
-         var _loc3_:String = null;
-         var _loc2_:Object = {};
-         for(_loc3_ in param1)
-         {
-            _loc2_[param1] = param1[_loc3_];
-         }
-         return _loc2_;
-      }
-      
-      protected function updatePositionOffset() : void
-      {
-         this.positionOffset = this.ticker.position - this._position;
-      }
-      
-      protected function nullListener(param1:Event) : void
-      {
-      }
-      
-      protected function handleTick(param1:Event) : void
-      {
-         this.inTick = true;
-         if(pauseAll)
-         {
-            this.updatePositionOffset();
-         }
-         else
-         {
-            this.setPosition(this.ticker.position - this.positionOffset,false);
-         }
-         this.inTick = false;
-      }
-   }
-}
-
-import flash.display.Shape;
-import flash.events.Event;
-import flash.events.EventDispatcher;
-import flash.events.IEventDispatcher;
-import flash.events.TimerEvent;
-import flash.utils.Proxy;
-import flash.utils.Timer;
-import flash.utils.flash_proxy;
-import flash.utils.getTimer;
-
-use namespace flash_proxy;
-
-interface ITicker extends IEventDispatcher
-{
-   
-   function get position() : Number;
-}
-
-class TimeTicker extends EventDispatcher implements ITicker
-{
-   
-   protected var timer:Timer;
-   
-   public function TimeTicker()
-   {
-      super();
-      this.timer = new Timer(20);
-      this.timer.start();
-      this.timer.addEventListener(TimerEvent.TIMER,this.tick);
-   }
-   
-   public function get position() : Number
-   {
-      return getTimer() / 1000;
-   }
-   
-   public function set interval(param1:Number) : void
-   {
-      this.timer.delay = param1 * 1000;
-   }
-   
-   protected function tick(param1:TimerEvent) : void
-   {
-      dispatchEvent(new Event("tick"));
-      param1.updateAfterEvent();
-   }
-}
-
-class FrameTicker extends EventDispatcher implements ITicker
-{
-   
-   protected var shape:Shape;
-   
-   protected var _position:Number = 0;
-   
-   public function FrameTicker()
-   {
-      super();
-      this.shape = new Shape();
-      this.shape.addEventListener(Event.ENTER_FRAME,this.tick);
-   }
-   
-   public function get position() : Number
-   {
-      return this._position;
-   }
-   
-   protected function tick(param1:Event) : void
-   {
-      ++this._position;
-      dispatchEvent(new Event("tick"));
-   }
-}
-
-class HybridTicker extends EventDispatcher implements ITicker
-{
-   
-   protected var shape:Shape;
-   
-   public function HybridTicker()
-   {
-      super();
-      this.shape = new Shape();
-      this.shape.addEventListener(Event.ENTER_FRAME,this.tick);
-   }
-   
-   public function get position() : Number
-   {
-      return getTimer() / 1000;
-   }
-   
-   protected function tick(param1:Event) : void
-   {
-      dispatchEvent(new Event("tick"));
-   }
-}
-
-dynamic class TargetProxy extends Proxy
-{
-   
-   private var gTween:GTween;
-   
-   public function TargetProxy(param1:GTween)
-   {
-      super();
-      this.gTween = param1;
-   }
-   
-   override flash_proxy function callProperty(param1:*, ... rest) : *
-   {
-      return this.gTween.propertyTarget[param1].apply(null,rest);
-   }
-   
-   override flash_proxy function getProperty(param1:*) : *
-   {
-      var _loc2_:Number = Number(this.gTween.getProperty(param1));
-      return isNaN(_loc2_) ? this.gTween.propertyTarget[param1] : _loc2_;
-   }
-   
-   override flash_proxy function setProperty(param1:*, param2:*) : void
-   {
-      if(isNaN(param2))
-      {
-         this.gTween.propertyTarget[param1] = param2;
-      }
-      else
-      {
-         this.gTween.setProperty(String(param1),Number(param2));
-      }
-   }
-   
-   override flash_proxy function deleteProperty(param1:*) : Boolean
-   {
-      return this.gTween.deleteProperty(param1);
-   }
-}
+﻿/*** GTween v1 by Grant Skinner. Aug 15, 2008* GTween v2 by Grant Skinner. Oct 02, 2009* Visit www.gskinner.com/blog for documentation, updates and more free code.*** Copyright (c) 2009 Grant Skinner* * Permission is hereby granted, free of charge, to any person* obtaining a copy of this software and associated documentation* files (the "Software"), to deal in the Software without* restriction, including without limitation the rights to use,* copy, modify, merge, publish, distribute, sublicense, and/or sell* copies of the Software, and to permit persons to whom the* Software is furnished to do so, subject to the following* conditions:* * The above copyright notice and this permission notice shall be* included in all copies or substantial portions of the Software.* * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR* OTHER DEALINGS IN THE SOFTWARE.**/package com.gskinner.motion {		import flash.display.Shape;	import flash.events.EventDispatcher;	import flash.events.Event;	import flash.utils.Dictionary;	import flash.utils.getTimer;	import flash.events.IEventDispatcher;		/**	* <b>GTween ©2008 Grant Skinner, gskinner.com. Visit www.gskinner.com/libraries/gtween/ for documentation, updates and more free code. Licensed under the MIT license - see the source file header for more information.</b>	* <hr>	* GTween is a light-weight instance oriented tween engine. This means that you instantiate tweens for specific purposes, and then reuse, update or discard them.	* This is different than centralized tween engines where you "register" tweens with a global object. This provides a more familiar and useful interface	* for object oriented programmers.	* <br/><br/>	* In addition to a more traditional setValue/setValues tweening interface, GTween also provides a unique proxy interface to tween and access properties of target objects	* in a more dynamic fashion. This allows you to work with properties directly, and mostly ignore the details of the tween. The proxy "stands in"	* for your object when working with tweened properties. For example, you can modify end values (the value you are tweening to), in the middle of a tween.	* You can also access them dynamically, like so:	* <br/><br/>	* <code>mySpriteTween.proxy.rotation += 50;</code>	* <br/><br/>	* Assuming no end value has been set for rotation previously, the above example will get the current rotation from the target, add 50 to it, set it as the end	* value for rotation, and start the tween. If the tween has already started, it will adjust for the new values. This is a hugely powerful feature that	* requires a bit of exploring to completely understand. See the documentation for the "proxy" property for more information.	* <br/><br/>	* For a light-weight engine (~3.5kb), GTween boasts a number of advanced features:<UL>	* <LI> frame and time based durations/positions which can be set per tween	* <LI> works with any numeric properties on any object (not just display objects)	* <LI> simple sequenced tweens using .nextTween	* <LI> pause and resume individual tweens or all tweens	* <LI> jump directly to the end or beginning of a tween with .end() or .beginning()	* <LI> jump to any arbitrary point in the tween with .position	* <LI> complete, init, and change callbacks	* <LI> smart garbage collector interactions (prevents collection while active, allows collection if target is collected)	* <LI> uses any standard ActionScript tween functions	* <LI> easy to set up in a single line of code	* <LI> can repeat or reflect a tween a specified number of times	* <LI> deterministic, so setting a position on a tween will (almost) always result in predictable results	* <LI> very powerful sequencing capabilities in conjunction with GTweenTimeline.	* </UL>	*	* <hr/>	* <b>Version 2 Notes (Oct 2, 2009):</b><br/>	* GTween version 2 constitutes a complete rewrite of the library. This version	* is 20% smaller than beta 5 (<3.5kb), it performs up to 5x faster, adds timeScale functionality,	* and supports a simple but robust plug-in model. The logic and source is also much	* simpler and easy to follow.	*	* <hr/>	* <b>Version 2.01 Notes (Dec 11, 2009):</b><br/>	* Minor update based on user feedback:<UL>	* <LI> added GTween.version property. (thanks Colin Moock for the request)	* <LI> added .dispatchEvents and GTween.defaultDispatchEvents properties, so you can enable AS3 events. (thanks Colin Moock for the request)	* <LI> fixed a problem with tweens in a timeline initing at the wrong time, and added support for position values less than -delay. (thanks Erik Blankinship for the bug report)	* <LI> fixed a problem with tween values being set to NaN before the controlling timeline started playing. (thanks to Erik for the bug report)	* <LI> added support for multiple callbacks at a single position to GTweenTimeline. (thanks to sharvey, edzis for the feature request)	* <LI> fixed issue with callbacks being called again when a timeline completes. (thanks to edzis for the bug report)	* </UL>	**/	public class GTween extends EventDispatcher {			// Constants:			// Static interface:		/**		* Indicates the version number for this build. The numeric value will always		* increase with the version number for easy comparison (ex. GTween.version >= 2.12).		* Currently, it incorporates the major version as the integer value, and the two digit		* build number as the decimal value. For example, the fourth build of version 3 would		* have version=3.04.		**/		public static var version:Number = 2.01;				/**		* Sets the default value of dispatchEvents for new instances.		**/		public static var defaultDispatchEvents:Boolean=false;				/**		* Specifies the default easing function to use with new tweens. Set to GTween.linearEase by default.		**/		public static var defaultEase:Function=linearEase;				/**		* Setting this to true pauses all tween instances. This does not affect individual tweens' .paused property.		**/		public static var pauseAll:Boolean=false;				/**		* Sets the time scale for all tweens. For example to run all tweens at half speed,		* you can set timeScaleAll to 0.5. It is multiplied against each tweens timeScale.		* For example a tween with timeScale=2 will play back at normal speed if timeScaleAll is set to 0.5.		**/		public static var timeScaleAll:Number=1;				/** @private **/		protected static var hasStarPlugins:Boolean=false;		/** @private **/		protected static var plugins:Object={};		/** @private **/		protected static var shape:Shape;		/** @private **/		protected static var time:Number;		/** @private **/		protected static var tickList:Dictionary = new Dictionary(true);		/** @private **/		protected static var gcLockList:Dictionary = new Dictionary(false);				/**		* Installs a plugin for the specified property. Plugins with high priority		* will always be called before other plugins for the same property. This method		* is primarily used by plugin developers. Plugins are normally installed by calling		* the install method on them, such as BlurPlugin.install().		* <br/><br/>		* Plugins can register to be associated with a specific property name, or to be		* called for all tweens by registering for the "*" property name. The latter will be called after		* all properties are inited or tweened for a particular GTween instance.		*		* @param plugin The plugin object to register. The plugin should conform to the IGTweenPlugin interface.		* @param propertyNames An array of property names to operate on (ex. "rotation"), or "*" to register the plugin to be called for every GTween instance.		* @param highPriority If true, the plugin will be added to the start of the plugin list for the specified property name, if false it will be added to the end.		**/		public static function installPlugin(plugin:Object, propertyNames:Array, highPriority:Boolean=false):void {			for (var i:uint=0; i<propertyNames.length; i++) {				var propertyName:String = propertyNames[i];				if (propertyName == "*") { hasStarPlugins = true; }				if (plugins[propertyName] == null) { plugins[propertyName] = [plugin]; continue; }				if (highPriority) {					plugins[propertyName].unshift(plugin);				} else {					plugins[propertyName].push(plugin);				}			}		}				/** The default easing function used by GTween. **/		public static function linearEase(a:Number, b:Number, c:Number, d:Number):Number {			return a;		}				staticInit();		/** @private **/		protected static function staticInit():void {			(shape = new Shape()).addEventListener(Event.ENTER_FRAME,staticTick);			time = getTimer()/1000;		}				/** @private **/		protected static function staticTick(evt:Event):void {			var t:Number = time;			time = getTimer()/1000;			if (pauseAll) { return; }			var dt:Number = (time-t)*timeScaleAll;			for (var o:Object in tickList) {				var tween:GTween = o as GTween;				tween.position = tween._position+(tween.useFrames?timeScaleAll:dt)*tween.timeScale;			}		}			// Public Properties:		/** @private **/		protected var _delay:Number=0;		/** @private **/		protected var _values:Object;		/** @private **/		protected var _paused:Boolean=true;		/** @private **/		protected var _position:Number;		/** @private **/		protected var _inited:Boolean;		/** @private **/		protected var _initValues:Object;		/** @private **/		protected var _rangeValues:Object;		/** @private **/		protected var _proxy:TargetProxy;			// Protected Properties:		/**		* Indicates whether the tween should automatically play when an end value is changed.		**/		public var autoPlay:Boolean=true;				/**		* Allows you to associate arbitrary data with your tween. For example, you might use this to reference specific data when handling event callbacks from tweens.		**/		public var data:*;				/**		* The length of the tween in frames or seconds (depending on the timingMode). Setting this will also update any child transitions that have synchDuration set to true.		**/		public var duration:Number;				/**		* The easing function to use for calculating the tween. This can be any standard tween function, such as the tween functions in fl.motion.easing.* that come with Flash CS3.		* New tweens will have this set to <code>defaultTween</code>. Setting this to null will cause GTween to throw null reference errors.		**/		public var ease:Function;				/**		* Specifies another GTween instance that will have <code>paused=false</code> set on it when this tween completes.		* This happens immediately before onComplete is called.		**/		public var nextTween:GTween;				/**		* Stores data for plugins specific to this instance. Some plugins may allow you to set properties on this object that they use.		* Check the documentation for your plugin to see if any properties are supported.		* Most plugins also support a property on this object in the form PluginNameEnabled to enable or disable		* the plugin for this tween (ex. BlurEnabled for BlurPlugin). Many plugins will also store internal data in this object.		**/		public var pluginData:Object;				/**		* Indicates whether the tween should use the reflect mode when repeating. If reflect is set to true, then the tween will play backwards on every other repeat.		**/		public var reflect:Boolean;				/**		* The number of times this tween will run. If 1, the tween will only run once. If 2 or more, the tween will repeat that many times. If 0, the tween will repeat forever.		**/		public var repeatCount:int=1;				/**		* The target object to tween. This can be any kind of object. You can retarget a tween at any time, but changing the target in mid-tween may result in unusual behaviour.		**/		public var target:Object;				/**		* If true, durations and positions can be set in frames. If false, they are specified in seconds.		**/		public var useFrames:Boolean;				/**		* Allows you to scale the passage of time for a tween. For example, a tween with a duration of 5 seconds, and a timeScale of 2 will complete in 2.5 seconds.		* With a timeScale of 0.5 the same tween would complete in 10 seconds.		**/		public var timeScale:Number=1;				/**		* The position of the tween at the previous change. This should not be set directly.		**/		public var positionOld:Number;				/**		* The eased ratio (generally between 0-1) of the tween at the current position. This should not be set directly.		**/		public var ratio:Number;				/**		* The eased ratio (generally between 0-1) of the tween at the previous position. This should not be set directly.		**/		public var ratioOld:Number;				/**		* The current calculated position of the tween. 		* This is a deterministic value between 0 and duration calculated		* from the current position based on the duration, repeatCount, and reflect properties.		* This is always a value between 0 and duration, whereas <code>.position</code> can range		* between -delay and repeatCount*duration. This should not be set directly.		**/		public var calculatedPosition:Number;				/**		* The previous calculated position of the tween. See <code>.calculatedPosition</code> for more information.		* This should not be set directly.		**/		public var calculatedPositionOld:Number;				/**		* If true, events/callbacks will not be called. As well as allowing for more		* control over events, and providing flexibility for extension, this results		* in a slight performance increase, particularly if useCallbacks is false.		**/		public var suppressEvents:Boolean;				/**		* If true, it will dispatch init, change, and complete events in addition to calling the		* onInit, onChange, and onComplete callbacks. Callbacks provide significantly better		* performance, whereas events are more standardized and flexible (allowing multiple		* listeners, for example).		* <br/><br/>		* By default this will use the value of defaultDispatchEvents.		**/		public var dispatchEvents:Boolean;				/**		* Callback for the complete event. Any function assigned to this callback		* will be called when the tween finishes with a single parameter containing		* a reference to the tween.		* <br/><br/>		* Ex.<br/>		* <code><pre>myTween.onComplete = myFunction;		* function myFunction(tween:GTween):void {		*	trace("tween completed");		* }</pre></code>		**/		public var onComplete:Function;				/**		* Callback for the change event. Any function assigned to this callback		* will be called each frame while the tween is active with a single parameter containing		* a reference to the tween.		**/		public var onChange:Function;				/**		* Callback for the init event. Any function assigned to this callback		* will be called when the tween inits with a single parameter containing		* a reference to the tween. Init is usually triggered when a tween finishes		* its delay period and becomes active, but it can also be triggered by other		* features that require the tween to read the initial values, like calling <code>.swapValues()</code>.		**/		public var onInit:Function;			// Initialization:		/**		* Constructs a new GTween instance.		*		* @param target The object whose properties will be tweened. Defaults to null.		* @param duration The length of the tween in frames or seconds depending on the timingMode. Defaults to 1.		* @param values An object containing end property values. For example, to tween to x=100, y=100, you could pass {x:100, y:100} as the values object.		* @param props An object containing properties to set on this tween. For example, you could pass {ease:myEase} to set the ease property of the new instance. It also supports a single special property "swapValues" that will cause <code>.swapValues</code> to be called after the values specified in the values parameter are set.		* @param pluginData An object containing data for installed plugins to use with this tween. See <code>.pluginData</code> for more information.		**/		public function GTween(target:Object=null, duration:Number=1, values:Object=null, props:Object=null, pluginData:Object=null) {			ease = defaultEase;			dispatchEvents = defaultDispatchEvents;			this.target = target;			this.duration = duration;			this.pluginData = copy(pluginData,{});			if (props) { var swap:Boolean = props.swapValues; delete(props.swapValues); }			copy(props,this);			resetValues(values);			if (swap) { swapValues(); }			if (this.duration == 0 && delay == 0 && autoPlay) { position=0; }		}			// Public getter / setters:		/**		* Plays or pauses a tween. You can still change the position value externally on a paused		* tween, but it will not be updated automatically. While paused is false, the tween is also prevented		* from being garbage collected while it is active.		* This is achieved in one of two ways:<br/>		* 1. If the target object is an IEventDispatcher, then the tween will subscribe to a dummy event using a hard reference. This allows		* the tween to be garbage collected if its target is also collected, and there are no other external references to it.<br/>		* 2. If the target object is not an IEventDispatcher, then the tween is placed in a global list, to prevent collection until it is paused or completes.<br/>		* Note that pausing all tweens via the GTween.pauseAll static property will not free the tweens for collection.		**/		public function get paused():Boolean {			return _paused;		}		public function set paused(value:Boolean):void {			if (value == _paused) { return; }			_paused = value;			if (_paused) {				delete(tickList[this]);				if (target is IEventDispatcher) { target.removeEventListener("_", invalidate); }				delete(gcLockList[this]);			} else {				if (isNaN(_position) || (repeatCount != 0 && _position >= repeatCount*duration)) {					// reached the end, reset.					_inited = false;					calculatedPosition = calculatedPositionOld = ratio = ratioOld = positionOld = 0;					_position = -delay;				}				tickList[this] = true;				// prevent garbage collection:				if (target is IEventDispatcher) { target.addEventListener("_", invalidate); }				else { gcLockList[this] = true; }			}		}				/**		* Gets and sets the position of the tween in frames or seconds (depending on <code>.useFrames</code>). This value will		* be constrained between -delay and repeatCount*duration. It will be resolved to a <code>calculatedPosition</code> before		* being applied.		* <br/><br/>		* <b>Negative values</b><br/>		* Values below 0 will always resolve to a calculatedPosition of 0. Negative values can be used to set up a delay on the tween, as the tween will have to count up to 0 before initing.		* <br/><br/>		* <b>Positive values</b><br/>		* Positive values are resolved based on the duration, repeatCount, and reflect properties.		**/		public function get position():Number {			return _position;		}		public function set position(value:Number):void {			positionOld = _position;			ratioOld = ratio;			calculatedPositionOld = calculatedPosition;						var maxPosition:Number = repeatCount*duration;						var end:Boolean = (value >= maxPosition && repeatCount > 0);			if (end) {				if (calculatedPositionOld == maxPosition) { return; }				_position = maxPosition;				calculatedPosition = (reflect && !(repeatCount&1)) ? 0 : duration;			} else {				_position = value;				calculatedPosition = _position<0 ? 0 : _position%duration;				if (reflect && (_position/duration&1)) {					calculatedPosition = duration-calculatedPosition;				}			}						ratio = (duration == 0 && _position >= 0) ? 1 : ease(calculatedPosition/duration,0,1,1);			if (target && (_position >= 0 || positionOld >= 0) && calculatedPosition != calculatedPositionOld) {				if (!_inited) { init(); }				for (var n:String in _values) {					var initVal:Number = _initValues[n];					var rangeVal:Number = _rangeValues[n];					var val:Number = initVal+rangeVal*ratio;										var pluginArr:Array = plugins[n];					if (pluginArr) {						var l:uint = pluginArr.length;						for (var i:uint=0; i<l; i++) {							val = pluginArr[i].tween(this,n,val,initVal,rangeVal,ratio,end);						}						if (!isNaN(val)) { target[n] = val; }					} else {						target[n] = val;					}				}			}						if (hasStarPlugins) {				pluginArr = plugins["*"];				l = pluginArr.length;				for (i=0; i<l; i++) {					pluginArr[i].tween(this,"*",NaN,NaN,NaN,ratio,end);				}			}						if (!suppressEvents) {				if (dispatchEvents) { dispatchEvt("change"); }				if (onChange != null) { onChange(this); }			}			if (end) {				paused = true;				if (nextTween) { nextTween.paused = false; }				if (!suppressEvents) {					if (dispatchEvents) { dispatchEvt("complete"); }					if (onComplete != null) { onComplete(this); }				}			}		}				/**		* The length of the delay in frames or seconds (depending on <code>.useFrames</code>).		* The delay occurs before a tween reads initial values or starts playing.		**/		public function get delay():Number {			return _delay;		}		public function set delay(value:Number):void {			if (_position <= 0) {				_position = -value;			}			_delay = value;		}				/**		* The proxy object allows you to work with the properties and methods of the target object directly through GTween.		* Numeric property assignments will be used by GTween as end values. The proxy will return GTween end values		* when they are set, or the target's property values if they are not. Delete operations on properties will result in a deleteProperty		* call. All other property access and method execution through proxy will be passed directly to the target object.		* <br/><br/>		* <b>Example 1:</b> Equivalent to calling myGTween.setProperty("scaleY",2.5):<br/>		* <code>myGTween.proxy.scaleY = 2.5;</code>		* <br/><br/>		* <b>Example 2:</b> Gets the current rotation value from the target object (because it hasn't been set yet on the GTween), adds 100 to it, and then		* calls setProperty on the GTween instance with the appropriate value:<br/>		* <code>myGTween.proxy.rotation += 100;</code>		* <br/><br/>		* <b>Example 3:</b> Sets an end property value (through setProperty) for scaleX, then retrieves it from GTween (because it will always return		* end values when available):<br/>		* <code>trace(myGTween.proxy.scaleX); // 1 (value from target, because no end value is set)<br/>		* myGTween.proxy.scaleX = 2; // set a end value<br/>		* trace(myGTween.proxy.scaleX); // 2 (end value from GTween)<br/>		* trace(myGTween.target.scaleX); // 1 (current value from target)</code>		* <br/><br/>		* <b>Example 4:</b> Property deletions only affect end properties on GTween, not the target object:<br/>		* <code>myGTween.proxy.rotation = 50; // set an end value<br/>		* trace(myGTween.proxy.rotation); // 50 (end value from GTween)<br/>		* delete(myGTween.proxy.rotation); // delete the end value<br/>		* trace(myGTween.proxy.rotation); // 0 (current value from target)</code>		* <br/><br/>		* <b>Example 5:</b> Non-numeric property access is passed through to the target:<br/>		* <code>myGTween.proxy.blendMode = "multiply"; // passes value assignment through to the target<br/>		* trace(myGTween.target.blendMode); // "multiply" (value from target)<br/>		* trace(myGTween.proxy.blendMode); // "multiply" (value passed through proxy from target)</code>		* <br/><br/>		* <b>Example 6:</b> Method calls are passed through to target:<br/>		* <code>myGTween.proxy.gotoAndStop(30); // gotoAndStop(30) will be called on the target</code>		**/		public function get proxy():TargetProxy {			if (_proxy == null) { _proxy = new TargetProxy(this); }			return _proxy;		}			// Public Methods:		/**		* Sets the numeric end value for a property on the target object that you would like to tween.		* For example, if you wanted to tween to a new x position, you could use: myGTween.setValue("x",400).		*		* @param name The name of the property to tween.		* @param value The numeric end value (the value to tween to).		**/		public function setValue(name:String, value:Number):void {			_values[name] = value;			invalidate();		}				/**		* Returns the end value for the specified property if one exists.		*		* @param name The name of the property to return a end value for.		**/		public function getValue(name:String):Number {			return _values[name];		}				/**		* Removes a end value from the tween. This prevents the GTween instance from tweening the property.		*		* @param name The name of the end property to delete.		**/		public function deleteValue(name:String):Boolean {			delete(_rangeValues[name]);			delete(_initValues[name]);			return delete(_values[name]);		}				/**		* Shorthand method for making multiple setProperty calls quickly.		* This adds the specified properties to the values list. Passing a		* property with a value of null will delete that value from the list.		* <br/><br/>		* <b>Example:</b> set x and y end values, delete rotation:<br/>		* <code>myGTween.setProperties({x:200, y:400, rotation:null});</code>		*		* @param properties An object containing end property values.		**/		public function setValues(values:Object):void {			copy(values,_values,true);			invalidate();		}				/**		* Similar to <code>.setValues()</code>, but clears all previous end values		* before setting the new ones.		*		* @param properties An object containing end property values.		**/		public function resetValues(values:Object=null):void {			_values = {};			setValues(values);		}				/**		* Returns the hash table of all end properties and their values. This is a copy of the internal hash of values, so modifying		* the returned object will not affect the tween.		**/		public function getValues():Object {			return copy(_values, {});		}				/**		* Returns the initial value for the specified property.		* Note that the value will not be available until the tween inits.		**/		public function getInitValue(name:String):Number {			return _initValues[name];		}				/**		* Swaps the init and end values for the tween, effectively reversing it.		* This should generally only be called before the tween starts playing.		* This will force the tween to init if it hasn't already done so, which		* may result in an onInit call.		* It will also force a render (so the target immediately jumps to the new values		* immediately) which will result in the onChange callback being called.		* <br/><br/>		* You can also use the special "swapValues" property on the props parameter of		* the GTween constructor to call swapValues() after the values are set.		* <br/><br/>		* The following example would tween the target from 100,100 to its current position:<br/>		* <code>new GTween(ball, 2, {x:100, y:100}, {swapValues:true});</code>		**/		public function swapValues():void {			if (!_inited) { init(); }			var o:Object = _values;			_values = _initValues;			_initValues = o;			for (var n:String in _rangeValues) { _rangeValues[n] *= -1; }			if (_position < 0) {				// render it at position 0:				var pos:Number = positionOld;				position = 0;				_position = positionOld;				positionOld = pos;			} else {				position = _position;			}		}				/**		* Reads all of the initial values from target and calls the onInit callback.		* This is called automatically when a tween becomes active (finishes delaying)		* and when <code>.swapValues()</code> is called. It would rarely be used directly		* but is exposed for possible use by plugin developers or power users.		**/		public function init():void {			_inited = true;			_initValues = {};			_rangeValues = {};			for (var n:String in _values) {				if (plugins[n]) {					var pluginArr:Array = plugins[n];					var l:uint = pluginArr.length;					var value:Number = (n in target) ? target[n] : NaN;					for (var i:uint=0; i<l; i++) {						value = pluginArr[i].init(this,n,value);					}					if (!isNaN(value)) {						_rangeValues[n] = _values[n]-(_initValues[n] = value);					}				} else {					_rangeValues[n] = _values[n]-(_initValues[n] = target[n]);				}			}						if (hasStarPlugins) {				pluginArr = plugins["*"];				l = pluginArr.length;				for (i=0; i<l; i++) {					pluginArr[i].init(this,"*",NaN);				}			}						if (!suppressEvents) {				if (dispatchEvents) { dispatchEvt("init"); }				if (onInit != null) { onInit(this); }			}		}				/**		* Jumps the tween to its beginning and pauses it. This is the same as setting <code>position=0</code> and <code>paused=true</code>.		**/		public function beginning():void {			position = 0;			paused = true;		}				/**		* Jumps the tween to its end and pauses it. This is roughly the same as setting <code>position=repeatCount*duration</code>.		**/		public function end():void {			position = (repeatCount > 0) ? repeatCount*duration : duration;		}			// Protected Methods:		/** @private **/		protected function invalidate():void {			_inited = false;			if (_position > 0) { _position = 0; }			if (autoPlay) { paused = false; }		}			/** @private **/		protected function copy(o1:Object,o2:Object,smart:Boolean=false):Object {			for (var n:String in o1) {				if (smart && o1[n] == null) {					delete(o2[n]);				} else {					o2[n] = o1[n];				}			}			return o2;		}				/** @private **/		protected function dispatchEvt(name:String):void {			if (hasEventListener(name)) { dispatchEvent(new Event(name)); }		}					}}import flash.utils.Proxy;import flash.utils.flash_proxy;import com.gskinner.motion.GTween;dynamic class TargetProxy extends Proxy {		private var tween:GTween;		public function TargetProxy(tween:GTween):void {		this.tween = tween;	}	// proxy methods:	flash_proxy override function callProperty(methodName:*, ...args:Array):* {		return tween.target[methodName].apply(null,args);	}		flash_proxy override function getProperty(prop:*):* {		var value:Number = tween.getValue(prop);		return (isNaN(value)) ? tween.target[prop] : value;	}		flash_proxy override function setProperty(prop:*,value:*):void {		if (value is Boolean || value is String || isNaN(value)) { tween.target[prop] = value; }		else { tween.setValue(String(prop), Number(value)); }	}		flash_proxy override function deleteProperty(prop:*):Boolean {		tween.deleteValue(prop);		return true;	}}

@@ -266,163 +266,305 @@ package SystemComponent.Word.Role
          var _loc3_:String = param1.$keyString.substring(param1.$keyString.length - 2,param1.$keyString.length);
          var _loc4_:int = 0;
          loop0:
-         while(true)
-         {
-            if(_loc4_ > 1)
+         // while(true)
+         // {
+            // if(_loc4_ > 1)
+            for(; _loc4_ <= 1; _loc3_ = _loc3_.charAt(1),_loc4_++) //
             {
-               switch(param2)
-               {
-                  case Keyboard.J:
-                     return "普通攻击";
-                  case Keyboard.K:
-                     return "none";
-                  case Keyboard.L:
-                     return "瞬步";
-                  case Keyboard.U:
-                     if(param1.$ob.shuangdao)
-                     {
-                        return "寸破（双刀）";
-                     }
-                     return "切削";
-                     break;
-                  case Keyboard.I:
-                     if(param1.$ob.shuangdao)
-                     {
-                        return "二击";
-                     }
-                     return "突刺·地";
-                     break;
-                  case Keyboard.O:
-                     break;
-                  case Keyboard.P:
-                     if(param1.$ob.shuangdao)
-                     {
-                        return "解除双刀";
-                     }
-                     return "双刀模式";
-               }
+               // switch(param2)
+               // {
+               //    case Keyboard.J:
+               //       return "普通攻击";
+               //    case Keyboard.K:
+               //       return "none";
+               //    case Keyboard.L:
+               //       return "瞬步";
+               //    case Keyboard.U:
+               //       if(param1.$ob.shuangdao)
+               //       {
+               //          return "寸破（双刀）";
+               //       }
+               //       return "切削";
+               //       break;
+               //    case Keyboard.I:
+               //       if(param1.$ob.shuangdao)
+               //       {
+               //          return "二击";
+               //       }
+               //       return "突刺·地";
+               //       break;
+               //    case Keyboard.O:
+               //       break;
+               //    case Keyboard.P:
+               //       if(param1.$ob.shuangdao)
+               //       {
+               //          return "解除双刀";
+               //       }
+               //       return "双刀模式";
+               // }
+               if(param1.$ob.shuangdao) //
+               { //
+                  switch(param2) //
+                  { //
+                     case Keyboard.J: //
+                        switch(_loc3_) //
+                        { //
+                           case "S": //
+                              return "抓取"; //
+                        } //
+                        break; //
+                     case Keyboard.K: //
+                        return "none"; //
+                     case Keyboard.L: //
+                        switch(_loc3_) //
+                        { //
+                           case "S": //
+                        } //
+                        break; //
+                     case Keyboard.U: //
+                        switch(_loc3_) //
+                        { //
+                           case "W": //
+                              return "上挑·双"; //
+                           case "S": //
+                              return "地爆破"; //
+                        } //
+                        break; //
+                     case Keyboard.I: //
+                        switch(_loc3_) //
+                        { //
+                           case "W": //
+                              return "地爆"; //
+                           case "S": //
+                              return "瞬落斩"; //
+                        } //
+                        break; //
+                     case Keyboard.O: //
+                        switch(_loc3_) //
+                        { //
+                           case "S": //
+                              return "爆破炎"; //
+                        } //
+                        break; //
+                     case Keyboard.P: //
+                        switch(_loc3_) //
+                        { //
+                           case "S": //
+                              return "none"; //
+                        } //
+                  } //
+               } //
+               else //
+               { //
+                  switch(param2) //
+                  { //
+                     case Keyboard.J: //
+                        break loop0; //
+                     case Keyboard.K: //
+                        return "none"; //
+                     case Keyboard.L: //
+                        switch(_loc3_) //
+                        { //
+                           case "S": //
+                        } //
+                        continue; //
+                     case Keyboard.U: //
+                        switch(_loc3_) //
+                        { //
+                           case "W": //
+                              return "上削"; //
+                           case "S": //
+                              return "寸破"; //
+                           default: //
+                              continue; //
+                        } //
+                        break; //
+                     case Keyboard.I: //
+                        switch(_loc3_) //
+                        { //
+                           case "W": //
+                              return "上挑"; //
+                           case "S": //
+                              return "飞落"; //
+                           default: //
+                              continue; //
+                        } //
+                        break; //
+                     case Keyboard.O: //
+                        switch(_loc3_) //
+                        { //
+                           case "AA": //
+                           case "DD": //
+                              return "大冲破"; //
+                           case "S": //
+                              return "爆破"; //
+                           case "W": //
+                              return "none"; //
+                           default: //
+                              continue; //
+                        } //
+                        break; //
+                     case Keyboard.P: //
+                        switch(_loc3_) //
+                        { //
+                           case "S": //
+                              return "none"; //
+                        } //
+                  } //
+               } //
             }
-            addr051d:
-            if(param1.$ob.shuangdao)
-            {
-               switch(param2)
-               {
-                  case Keyboard.J:
-                     switch(_loc3_)
-                     {
-                        case "S":
-                           return "抓取";
-                     }
-                     break;
-                  case Keyboard.K:
-                     return "none";
-                  case Keyboard.L:
-                     switch(_loc3_)
-                     {
-                        case "S":
-                     }
-                     break;
-                  case Keyboard.U:
-                     switch(_loc3_)
-                     {
-                        case "W":
-                           return "上挑·双";
-                        case "S":
-                           return "地爆破";
-                     }
-                     break;
-                  case Keyboard.I:
-                     switch(_loc3_)
-                     {
-                        case "W":
-                           return "地爆";
-                        case "S":
-                           return "瞬落斩";
-                     }
-                     break;
-                  case Keyboard.O:
-                     switch(_loc3_)
-                     {
-                        case "S":
-                           return "爆破炎";
-                     }
-                     break;
-                  case Keyboard.P:
-                     switch(_loc3_)
-                     {
-                        case "S":
-                           return "none";
-                     }
-               }
-            }
-            else
-            {
-               switch(param2)
-               {
-                  case Keyboard.J:
-                     break loop0;
-                  case Keyboard.K:
-                     return "none";
-                  case Keyboard.L:
-                     switch(_loc3_)
-                     {
-                        case "S":
-                     }
-                     continue;
-                  case Keyboard.U:
-                     switch(_loc3_)
-                     {
-                        case "W":
-                           return "上削";
-                        case "S":
-                           return "寸破";
-                        default:
-                           continue;
-                     }
-                     break;
-                  case Keyboard.I:
-                     switch(_loc3_)
-                     {
-                        case "W":
-                           return "上挑";
-                        case "S":
-                           return "飞落";
-                        default:
-                           continue;
-                     }
-                     break;
-                  case Keyboard.O:
-                     switch(_loc3_)
-                     {
-                        case "AA":
-                        case "DD":
-                           return "大冲破";
-                        case "S":
-                           return "爆破";
-                        case "W":
-                           return "none";
-                        default:
-                           continue;
-                     }
-                     break;
-                  case Keyboard.P:
-                     switch(_loc3_)
-                     {
-                        case "S":
-                           return "none";
-                     }
-               }
-            }
-            continue;
+            // addr051d:
+            // if(param1.$ob.shuangdao)
+            // {
+            //    switch(param2)
+            //    {
+            //       case Keyboard.J:
+            //          switch(_loc3_)
+            //          {
+            //             case "S":
+            //                return "抓取";
+            //          }
+            //          break;
+            //       case Keyboard.K:
+            //          return "none";
+            //       case Keyboard.L:
+            //          switch(_loc3_)
+            //          {
+            //             case "S":
+            //          }
+            //          break;
+            //       case Keyboard.U:
+            //          switch(_loc3_)
+            //          {
+            //             case "W":
+            //                return "上挑·双";
+            //             case "S":
+            //                return "地爆破";
+            //          }
+            //          break;
+            //       case Keyboard.I:
+            //          switch(_loc3_)
+            //          {
+            //             case "W":
+            //                return "地爆";
+            //             case "S":
+            //                return "瞬落斩";
+            //          }
+            //          break;
+            //       case Keyboard.O:
+            //          switch(_loc3_)
+            //          {
+            //             case "S":
+            //                return "爆破炎";
+            //          }
+            //          break;
+            //       case Keyboard.P:
+            //          switch(_loc3_)
+            //          {
+            //             case "S":
+            //                return "none";
+            //          }
+            //    }
+            // }
+            // else
+            // {
+            //    switch(param2)
+            //    {
+            //       case Keyboard.J:
+            //          break loop0;
+            //       case Keyboard.K:
+            //          return "none";
+            //       case Keyboard.L:
+            //          switch(_loc3_)
+            //          {
+            //             case "S":
+            //          }
+            //          continue;
+            //       case Keyboard.U:
+            //          switch(_loc3_)
+            //          {
+            //             case "W":
+            //                return "上削";
+            //             case "S":
+            //                return "寸破";
+            //             default:
+            //                continue;
+            //          }
+            //          break;
+            //       case Keyboard.I:
+            //          switch(_loc3_)
+            //          {
+            //             case "W":
+            //                return "上挑";
+            //             case "S":
+            //                return "飞落";
+            //             default:
+            //                continue;
+            //          }
+            //          break;
+            //       case Keyboard.O:
+            //          switch(_loc3_)
+            //          {
+            //             case "AA":
+            //             case "DD":
+            //                return "大冲破";
+            //             case "S":
+            //                return "爆破";
+            //             case "W":
+            //                return "none";
+            //             default:
+            //                continue;
+            //          }
+            //          break;
+            //       case Keyboard.P:
+            //          switch(_loc3_)
+            //          {
+            //             case "S":
+            //                return "none";
+            //          }
+            //    }
+            // }
+            // continue;
+            switch(param2) //
+            { //
+               case Keyboard.J: //
+                  return "普通攻击"; //
+               case Keyboard.K: //
+                  return "none"; //
+               case Keyboard.L: //
+                  return "瞬步"; //
+               case Keyboard.U: //
+                  if(param1.$ob.shuangdao) //
+                  { //
+                     return "寸破（双刀）"; //
+                  } //
+                  return "切削"; //
+                  break; //
+               case Keyboard.I: //
+                  if(param1.$ob.shuangdao) //
+                  { //
+                     return "二击"; //
+                  } //
+                  return "突刺·地"; //
+                  break; //
+               case Keyboard.O: //
+                  break; //
+               case Keyboard.P: //
+                  if(param1.$ob.shuangdao) //
+                  { //
+                     return "解除双刀"; //
+                  } //
+                  return "双刀模式"; //
+            } //
             return "none";
-            _loc3_ = _loc3_.charAt(1);
-            _loc4_++;
-         }
-         var _loc5_:String = _loc3_;
-         switch(0)
-         {
-         }
-         §§goto(addr051d);
+         //    _loc3_ = _loc3_.charAt(1);
+         //    _loc4_++;
+         // }
+         // var _loc5_:String = _loc3_;
+         // switch(0)
+         // {
+         // }
+         // §§goto(addr051d);
       }
       
       public static function getKeyJumpString(param1:SystemGameRole, param2:int = 0) : String

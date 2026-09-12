@@ -214,9 +214,10 @@ package SystemComponent.Word.Role
          {
             _loc4_ = 0;
             loop1:
-            while(true)
-            {
-               if(_loc4_ <= 1)
+            // while(true)
+            // {
+               // if(_loc4_ <= 1)
+               for(; _loc4_ <= 1; _loc3_ = _loc3_.charAt(1),_loc4_++) //
                {
                   switch(param2)
                   {
@@ -254,7 +255,7 @@ package SystemComponent.Word.Role
                         continue;
                   }
                }
-               addr01dc:
+               // addr01dc:
                switch(param2)
                {
                   case Keyboard.J:
@@ -271,14 +272,14 @@ package SystemComponent.Word.Role
                   case Keyboard.P:
                      return "解除卍解";
                }
-               _loc3_ = _loc3_.charAt(1);
-               _loc4_++;
-            }
-            var _loc5_:String = _loc3_;
-            switch(0)
-            {
-            }
-            §§goto(addr01dc);
+            //    _loc3_ = _loc3_.charAt(1);
+            //    _loc4_++;
+            // }
+            // var _loc5_:String = _loc3_;
+            // switch(0)
+            // {
+            // }
+            // §§goto(addr01dc);
          }
          else
          {

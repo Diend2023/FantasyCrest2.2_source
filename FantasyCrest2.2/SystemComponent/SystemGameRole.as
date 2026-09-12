@@ -611,6 +611,7 @@ package SystemComponent
          {
             return 0;
          }
+         return (0); //
       }
       
       public function set hitString(param1:String) : void
@@ -1671,7 +1672,11 @@ package SystemComponent
          {
             if(this.$skillCD[_loc1_] > 0)
             {
-               --this.$skillCD[_loc1_];
+               // --this.$skillCD[_loc1_];
+               var _loc2_:* = this.$skillCD; //
+               var _loc3_:* = _loc1_; //
+               var _loc4_:* = _loc2_[_loc3_] - 1; //
+               _loc2_[_loc3_] = _loc4_; //
             }
             if(this.$skillCD[_loc1_] == 0)
             {
