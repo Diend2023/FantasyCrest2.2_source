@@ -9,7 +9,7 @@ FantasyCrest2.2_source/
 ├── FantasyCrest2.2/            # 游戏源码 + 素材工程
 │   └── FantasyCrest2.2/        # ★ 素材工程（未压缩 XFL，等价于 FLA）
 ├── fonts/                      # 发布前需要安装的字体
-├── removed/                    # 被替换的旧文件（不参与编译）
+├── removed/                    # 被替换的旧库文件（不参与编译）
 ├── LICENSE
 └── README.md
 ```
@@ -18,7 +18,7 @@ FantasyCrest2.2_source/
 
 - 素材工程使用了未压缩的xfl格式而不是直接反编译为fla格式，方便查看、研究并修复问题
 - 需要使用至少Adobe FlashProfessional CC及以上版本打开[xfl](https://github.com/Diend2023/FantasyCrest2.2_source/blob/main/FantasyCrest2.2/FantasyCrest2.2/FantasyCrest2.2.xfl)项目
-- 部分第三方库使用源码版本进行了替换，详情见[com](https://github.com/Diend2023/FantasyCrest2.2_source/tree/main/FantasyCrest2.2/com)
+- 部分第三方库使用源码版本进行了替换，详情见[com](https://github.com/Diend2023/FantasyCrest2.2_source/tree/main/FantasyCrest2.2/com)、[deng](https://github.com/Diend2023/FantasyCrest2.2_source/tree/main/FantasyCrest2.2/deng)、[org]((https://github.com/Diend2023/FantasyCrest2.2_source/tree/main/FantasyCrest2.2/org))
 
 ## 致谢
 
