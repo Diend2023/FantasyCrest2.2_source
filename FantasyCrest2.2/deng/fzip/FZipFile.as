@@ -1,596 +1,630 @@
+/*
+ * Copyright (C) 2006 Claus Wahlers and Max Herkender
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would be
+ *    appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ *    misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
 package deng.fzip
 {
-   import deng.utils.ChecksumUtil;
-   import flash.utils.*;
-   
-   public class FZipFile
-   {
-      
-      public static const COMPRESSION_NONE:int = 0;
-      
-      public static const COMPRESSION_SHRUNK:int = 1;
-      
-      public static const COMPRESSION_REDUCED_1:int = 2;
-      
-      public static const COMPRESSION_REDUCED_2:int = 3;
-      
-      public static const COMPRESSION_REDUCED_3:int = 4;
-      
-      public static const COMPRESSION_REDUCED_4:int = 5;
-      
-      public static const COMPRESSION_IMPLODED:int = 6;
-      
-      public static const COMPRESSION_TOKENIZED:int = 7;
-      
-      public static const COMPRESSION_DEFLATED:int = 8;
-      
-      public static const COMPRESSION_DEFLATED_EXT:int = 9;
-      
-      public static const COMPRESSION_IMPLODED_PKWARE:int = 10;
-      
-      protected static var HAS_UNCOMPRESS:Boolean = describeType(ByteArray).factory.method.(@name == "uncompress").parameter.length() > 0;
-      
-      protected static var HAS_INFLATE:Boolean = describeType(ByteArray).factory.method.(@name == "inflate").length() > 0;
-      
-      protected var _versionHost:int = 0;
-      
-      protected var _versionNumber:String = "2.0";
-      
-      protected var _compressionMethod:int = 8;
-      
-      protected var _encrypted:Boolean = false;
-      
-      protected var _implodeDictSize:int = -1;
-      
-      protected var _implodeShannonFanoTrees:int = -1;
-      
-      protected var _deflateSpeedOption:int = -1;
-      
-      protected var _hasDataDescriptor:Boolean = false;
-      
-      protected var _hasCompressedPatchedData:Boolean = false;
-      
-      protected var _date:Date;
-      
-      protected var _adler32:uint;
-      
-      protected var _hasAdler32:Boolean = false;
-      
-      protected var _sizeFilename:uint = 0;
-      
-      protected var _sizeExtra:uint = 0;
-      
-      protected var _filename:String = "";
-      
-      protected var _filenameEncoding:String;
-      
-      protected var _extraFields:Dictionary;
-      
-      protected var _comment:String = "";
-      
-      protected var _content:ByteArray;
-      
-      internal var _crc32:uint;
-      
-      internal var _sizeCompressed:uint = 0;
-      
-      internal var _sizeUncompressed:uint = 0;
-      
-      protected var isCompressed:Boolean = false;
-      
-      protected var parseFunc:Function;
-      
-      public function FZipFile(param1:String = "utf-8")
-      {
-         this.parseFunc = this.parseFileHead;
-         super();
-         this._filenameEncoding = param1;
-         this._extraFields = new Dictionary();
-         this._content = new ByteArray();
-         this._content.endian = Endian.BIG_ENDIAN;
-      }
-      
-      public function get date() : Date
-      {
-         return this._date;
-      }
-      
-      public function set date(param1:Date) : void
-      {
-         this._date = param1 != null ? param1 : new Date();
-      }
-      
-      public function get filename() : String
-      {
-         return this._filename;
-      }
-      
-      public function set filename(param1:String) : void
-      {
-         this._filename = param1;
-      }
-      
-      internal function get hasDataDescriptor() : Boolean
-      {
-         return this._hasDataDescriptor;
-      }
-      
-      public function get content() : ByteArray
-      {
-         if(this.isCompressed)
-         {
-            this.uncompress();
-         }
-         return this._content;
-      }
-      
-      public function set content(param1:ByteArray) : void
-      {
-         this.setContent(param1);
-      }
-      
-      public function setContent(param1:ByteArray, param2:Boolean = true) : void
-      {
-         if(param1 != null && param1.length > 0)
-         {
-            param1.position = 0;
-            param1.readBytes(this._content,0,param1.length);
-            this._crc32 = ChecksumUtil.CRC32(this._content);
-            this._hasAdler32 = false;
-         }
-         else
-         {
-            this._content.length = 0;
-            this._content.position = 0;
-            this.isCompressed = false;
-         }
-         if(param2)
-         {
-            this.compress();
-         }
-         else
-         {
-            this._sizeUncompressed = this._sizeCompressed = this._content.length;
-         }
-      }
-      
-      public function get versionNumber() : String
-      {
-         return this._versionNumber;
-      }
-      
-      public function get sizeCompressed() : uint
-      {
-         return this._sizeCompressed;
-      }
-      
-      public function get sizeUncompressed() : uint
-      {
-         return this._sizeUncompressed;
-      }
-      
-      public function getContentAsString(param1:Boolean = true, param2:String = "utf-8") : String
-      {
-         var _loc3_:String = null;
-         if(this.isCompressed)
-         {
-            this.uncompress();
-         }
-         this._content.position = 0;
-         if(param2 == "utf-8")
-         {
-            _loc3_ = this._content.readUTFBytes(this._content.bytesAvailable);
-         }
-         else
-         {
-            _loc3_ = this._content.readMultiByte(this._content.bytesAvailable,param2);
-         }
-         this._content.position = 0;
-         if(param1)
-         {
-            this.compress();
-         }
-         return _loc3_;
-      }
-      
-      public function setContentAsString(param1:String, param2:String = "utf-8", param3:Boolean = true) : void
-      {
-         this._content.length = 0;
-         this._content.position = 0;
-         this.isCompressed = false;
-         if(param1 != null && param1.length > 0)
-         {
-            if(param2 == "utf-8")
-            {
-               this._content.writeUTFBytes(param1);
-            }
-            else
-            {
-               this._content.writeMultiByte(param1,param2);
-            }
-            this._crc32 = ChecksumUtil.CRC32(this._content);
-            this._hasAdler32 = false;
-         }
-         if(param3)
-         {
-            this.compress();
-         }
-         else
-         {
-            this._sizeUncompressed = this._sizeCompressed = this._content.length;
-         }
-      }
-      
-      public function serialize(param1:IDataOutput, param2:Boolean, param3:Boolean = false, param4:uint = 0) : uint
-      {
-         var _loc10_:Object = null;
-         var _loc15_:ByteArray = null;
-         var _loc16_:Boolean = false;
-         if(param1 == null)
-         {
-            return 0;
-         }
-         if(param3)
-         {
-            param1.writeUnsignedInt(FZip.SIG_CENTRAL_FILE_HEADER);
-            param1.writeShort(this._versionHost << 8 | 0x14);
-         }
-         else
-         {
-            param1.writeUnsignedInt(FZip.SIG_LOCAL_FILE_HEADER);
-         }
-         param1.writeShort(this._versionHost << 8 | 0x14);
-         param1.writeShort(this._filenameEncoding == "utf-8" ? 2048 : 0);
-         param1.writeShort(this.isCompressed ? COMPRESSION_DEFLATED : COMPRESSION_NONE);
-         var _loc5_:Date = this._date != null ? this._date : new Date();
-         var _loc6_:uint = uint(uint(_loc5_.getSeconds()) | uint(_loc5_.getMinutes()) << 5 | uint(_loc5_.getHours()) << 11);
-         var _loc7_:uint = uint(uint(_loc5_.getDate()) | uint(_loc5_.getMonth() + 1) << 5 | uint(_loc5_.getFullYear() - 1980) << 9);
-         param1.writeShort(_loc6_);
-         param1.writeShort(_loc7_);
-         param1.writeUnsignedInt(this._crc32);
-         param1.writeUnsignedInt(this._sizeCompressed);
-         param1.writeUnsignedInt(this._sizeUncompressed);
-         var _loc8_:ByteArray = new ByteArray();
-         _loc8_.endian = Endian.LITTLE_ENDIAN;
-         if(this._filenameEncoding == "utf-8")
-         {
-            _loc8_.writeUTFBytes(this._filename);
-         }
-         else
-         {
-            _loc8_.writeMultiByte(this._filename,this._filenameEncoding);
-         }
-         var _loc9_:uint = _loc8_.position;
-         for(_loc10_ in this._extraFields)
-         {
-            _loc15_ = this._extraFields[_loc10_] as ByteArray;
-            if(_loc15_ != null)
-            {
-               _loc8_.writeShort(uint(_loc10_));
-               _loc8_.writeShort(uint(_loc15_.length));
-               _loc8_.writeBytes(_loc15_);
-            }
-         }
-         if(param2)
-         {
-            if(!this._hasAdler32)
-            {
-               _loc16_ = this.isCompressed;
-               if(_loc16_)
-               {
-                  this.uncompress();
-               }
-               this._adler32 = ChecksumUtil.Adler32(this._content,0,this._content.length);
-               this._hasAdler32 = true;
-               if(_loc16_)
-               {
-                  this.compress();
-               }
-            }
-            _loc8_.writeShort(56026);
-            _loc8_.writeShort(4);
-            _loc8_.writeUnsignedInt(this._adler32);
-         }
-         var _loc11_:uint = _loc8_.position - _loc9_;
-         if(param3 && this._comment.length > 0)
-         {
-            if(this._filenameEncoding == "utf-8")
-            {
-               _loc8_.writeUTFBytes(this._comment);
-            }
-            else
-            {
-               _loc8_.writeMultiByte(this._comment,this._filenameEncoding);
-            }
-         }
-         var _loc12_:uint = _loc8_.position - _loc9_ - _loc11_;
-         param1.writeShort(_loc9_);
-         param1.writeShort(_loc11_);
-         if(param3)
-         {
-            param1.writeShort(_loc12_);
-            param1.writeShort(0);
-            param1.writeShort(0);
-            param1.writeUnsignedInt(0);
-            param1.writeUnsignedInt(param4);
-         }
-         if(_loc9_ + _loc11_ + _loc12_ > 0)
-         {
-            param1.writeBytes(_loc8_);
-         }
-         var _loc13_:uint = 0;
-         if(!param3 && this._content.length > 0)
-         {
-            if(this.isCompressed)
-            {
-               if(HAS_UNCOMPRESS || HAS_INFLATE)
-               {
-                  _loc13_ = this._content.length;
-                  param1.writeBytes(this._content,0,_loc13_);
-               }
-               else
-               {
-                  _loc13_ = this._content.length - 6;
-                  param1.writeBytes(this._content,2,_loc13_);
-               }
-            }
-            else
-            {
-               _loc13_ = this._content.length;
-               param1.writeBytes(this._content,0,_loc13_);
-            }
-         }
-         var _loc14_:uint = 30 + _loc9_ + _loc11_ + _loc12_ + _loc13_;
-         if(param3)
-         {
-            _loc14_ += 16;
-         }
-         return _loc14_;
-      }
-      
-      internal function parse(param1:IDataInput) : Boolean
-      {
-         while(Boolean(param1.bytesAvailable) && Boolean(this.parseFunc(param1)))
-         {
-         }
-         return this.parseFunc === this.parseFileIdle;
-      }
-      
-      protected function parseFileIdle(param1:IDataInput) : Boolean
-      {
-         return false;
-      }
-      
-      protected function parseFileHead(param1:IDataInput) : Boolean
-      {
-         if(param1.bytesAvailable >= 30)
-         {
-            this.parseHead(param1);
-            if(this._sizeFilename + this._sizeExtra > 0)
-            {
-               this.parseFunc = this.parseFileHeadExt;
-            }
-            else
-            {
-               this.parseFunc = this.parseFileContent;
-            }
-            return true;
-         }
-         return false;
-      }
-      
-      protected function parseFileHeadExt(param1:IDataInput) : Boolean
-      {
-         if(param1.bytesAvailable >= this._sizeFilename + this._sizeExtra)
-         {
-            this.parseHeadExt(param1);
-            this.parseFunc = this.parseFileContent;
-            return true;
-         }
-         return false;
-      }
-      
-      protected function parseFileContent(param1:IDataInput) : Boolean
-      {
-         var _loc2_:Boolean = true;
-         if(this._hasDataDescriptor)
-         {
-            this.parseFunc = this.parseFileIdle;
-            _loc2_ = false;
-         }
-         else if(this._sizeCompressed == 0)
-         {
-            this.parseFunc = this.parseFileIdle;
-         }
-         else if(param1.bytesAvailable >= this._sizeCompressed)
-         {
-            this.parseContent(param1);
-            this.parseFunc = this.parseFileIdle;
-         }
-         else
-         {
-            _loc2_ = false;
-         }
-         return _loc2_;
-      }
-      
-      protected function parseHead(param1:IDataInput) : void
-      {
-         var _loc2_:uint = param1.readUnsignedShort();
-         this._versionHost = _loc2_ >> 8;
-         this._versionNumber = Math.floor((_loc2_ & 0xFF) / 10) + "." + (_loc2_ & 0xFF) % 10;
-         var _loc3_:uint = param1.readUnsignedShort();
-         this._compressionMethod = param1.readUnsignedShort();
-         this._encrypted = (_loc3_ & 1) !== 0;
-         this._hasDataDescriptor = (_loc3_ & 8) !== 0;
-         this._hasCompressedPatchedData = (_loc3_ & 0x20) !== 0;
-         if((_loc3_ & 0x0320) !== 0)
-         {
-            this._filenameEncoding = "utf-8";
-         }
-         if(this._compressionMethod === COMPRESSION_IMPLODED)
-         {
-            this._implodeDictSize = (_loc3_ & 2) !== 0 ? 8192 : 4096;
-            this._implodeShannonFanoTrees = (_loc3_ & 4) !== 0 ? 3 : 2;
-         }
-         else if(this._compressionMethod === COMPRESSION_DEFLATED)
-         {
-            this._deflateSpeedOption = (_loc3_ & 6) >> 1;
-         }
-         var _loc4_:uint = param1.readUnsignedShort();
-         var _loc5_:uint = param1.readUnsignedShort();
-         var _loc6_:int = _loc4_ & 0x1F;
-         var _loc7_:int = (_loc4_ & 0x07E0) >> 5;
-         var _loc8_:int = (_loc4_ & 0xF800) >> 11;
-         var _loc9_:int = _loc5_ & 0x1F;
-         var _loc10_:int = (_loc5_ & 0x01E0) >> 5;
-         var _loc11_:int = ((_loc5_ & 0xFE00) >> 9) + 1980;
-         this._date = new Date(_loc11_,_loc10_ - 1,_loc9_,_loc8_,_loc7_,_loc6_,0);
-         this._crc32 = param1.readUnsignedInt();
-         this._sizeCompressed = param1.readUnsignedInt();
-         this._sizeUncompressed = param1.readUnsignedInt();
-         this._sizeFilename = param1.readUnsignedShort();
-         this._sizeExtra = param1.readUnsignedShort();
-      }
-      
-      protected function parseHeadExt(param1:IDataInput) : void
-      {
-         var _loc3_:uint = 0;
-         var _loc4_:uint = 0;
-         var _loc5_:ByteArray = null;
-         if(this._filenameEncoding == "utf-8")
-         {
-            this._filename = param1.readUTFBytes(this._sizeFilename);
-         }
-         else
-         {
-            this._filename = param1.readMultiByte(this._sizeFilename,this._filenameEncoding);
-         }
-         var _loc2_:uint = this._sizeExtra;
-         while(_loc2_ > 4)
-         {
-            _loc3_ = param1.readUnsignedShort();
-            _loc4_ = param1.readUnsignedShort();
-            if(_loc4_ > _loc2_)
-            {
-               throw new Error("Parse error in file " + this._filename + ": Extra field data size too big.");
-            }
-            if(_loc3_ === 56026 && _loc4_ === 4)
-            {
-               this._adler32 = param1.readUnsignedInt();
-               this._hasAdler32 = true;
-            }
-            else if(_loc4_ > 0)
-            {
-               _loc5_ = new ByteArray();
-               param1.readBytes(_loc5_,0,_loc4_);
-               this._extraFields[_loc3_] = _loc5_;
-            }
-            _loc2_ -= _loc4_ + 4;
-         }
-         if(_loc2_ > 0)
-         {
-            param1.readBytes(new ByteArray(),0,_loc2_);
-         }
-      }
-      
-      internal function parseContent(param1:IDataInput) : void
-      {
-         var _loc2_:uint = 0;
-         if(this._compressionMethod === COMPRESSION_DEFLATED && !this._encrypted)
-         {
-            if(HAS_UNCOMPRESS || HAS_INFLATE)
-            {
-               param1.readBytes(this._content,0,this._sizeCompressed);
-            }
-            else
-            {
-               if(!this._hasAdler32)
-               {
-                  throw new Error("Adler32 checksum not found.");
-               }
-               this._content.writeByte(120);
-               _loc2_ = uint(~this._deflateSpeedOption << 6 & 0xC0);
-               _loc2_ += 31 - (120 << 8 | _loc2_) % 31;
-               this._content.writeByte(_loc2_);
-               param1.readBytes(this._content,2,this._sizeCompressed);
-               this._content.position = this._content.length;
-               this._content.writeUnsignedInt(this._adler32);
-            }
-            this.isCompressed = true;
-         }
-         else
-         {
-            if(this._compressionMethod != COMPRESSION_NONE)
-            {
-               throw new Error("Compression method " + this._compressionMethod + " is not supported.");
-            }
-            param1.readBytes(this._content,0,this._sizeCompressed);
-            this.isCompressed = false;
-         }
-         this._content.position = 0;
-      }
-      
-      protected function compress() : void
-      {
-         if(!this.isCompressed)
-         {
-            if(this._content.length > 0)
-            {
-               this._content.position = 0;
-               this._sizeUncompressed = this._content.length;
-               if(HAS_INFLATE)
-               {
-                  this._content.deflate();
-                  this._sizeCompressed = this._content.length;
-               }
-               else if(HAS_UNCOMPRESS)
-               {
-                  this._content.compress.apply(this._content,["deflate"]);
-                  this._sizeCompressed = this._content.length;
-               }
-               else
-               {
-                  this._content.compress();
-                  this._sizeCompressed = this._content.length - 6;
-               }
-               this._content.position = 0;
-               this.isCompressed = true;
-            }
-            else
-            {
-               this._sizeCompressed = 0;
-               this._sizeUncompressed = 0;
-            }
-         }
-      }
-      
-      protected function uncompress() : void
-      {
-         if(this.isCompressed && this._content.length > 0)
-         {
-            this._content.position = 0;
-            if(HAS_INFLATE)
-            {
-               this._content.inflate();
-            }
-            else if(HAS_UNCOMPRESS)
-            {
-               this._content.uncompress.apply(this._content,["deflate"]);
-            }
-            else
-            {
-               this._content.uncompress();
-            }
-            this._content.position = 0;
-            this.isCompressed = false;
-         }
-      }
-      
-      public function toString() : String
-      {
-         return "[FZipFile]" + "\n  name:" + this._filename + "\n  date:" + this._date + "\n  sizeCompressed:" + this._sizeCompressed + "\n  sizeUncompressed:" + this._sizeUncompressed + "\n  versionHost:" + this._versionHost + "\n  versionNumber:" + this._versionNumber + "\n  compressionMethod:" + this._compressionMethod + "\n  encrypted:" + this._encrypted + "\n  hasDataDescriptor:" + this._hasDataDescriptor + "\n  hasCompressedPatchedData:" + this._hasCompressedPatchedData + "\n  filenameEncoding:" + this._filenameEncoding + "\n  crc32:" + this._crc32.toString(16) + "\n  adler32:" + this._adler32.toString(16);
-      }
-   }
-}
+	import deng.utils.ChecksumUtil;
+	
+	import flash.utils.*;
 
+	/**
+	 * Represents a file contained in a ZIP archive.
+	 */		
+	public class FZipFile
+	{
+		protected var _versionHost:int = 0;
+		protected var _versionNumber:String = "2.0";
+		protected var _compressionMethod:int = 8;
+		protected var _encrypted:Boolean = false;
+		protected var _implodeDictSize:int = -1;
+		protected var _implodeShannonFanoTrees:int = -1;
+		protected var _deflateSpeedOption:int = -1;
+		protected var _hasDataDescriptor:Boolean = false;
+		protected var _hasCompressedPatchedData:Boolean = false;
+		protected var _date:Date;
+		protected var _adler32:uint;
+		protected var _hasAdler32:Boolean = false;
+		protected var _sizeFilename:uint = 0;
+		protected var _sizeExtra:uint = 0;
+		protected var _filename:String = "";
+		protected var _filenameEncoding:String;
+		protected var _extraFields:Dictionary;
+		protected var _comment:String = "";
+		protected var _content:ByteArray;
+
+		internal var _crc32:uint;
+		internal var _sizeCompressed:uint = 0;
+		internal var _sizeUncompressed:uint = 0;
+
+		protected var isCompressed:Boolean = false;
+		protected var parseFunc:Function = parseFileHead;
+
+		// compression methods
+		/**
+		 * @private
+		 */		
+		public static const COMPRESSION_NONE:int = 0;
+		/**
+		 * @private
+		 */		
+		public static const COMPRESSION_SHRUNK:int = 1;
+		/**
+		 * @private
+		 */		
+		public static const COMPRESSION_REDUCED_1:int = 2;
+		/**
+		 * @private
+		 */		
+		public static const COMPRESSION_REDUCED_2:int = 3;
+		/**
+		 * @private
+		 */		
+		public static const COMPRESSION_REDUCED_3:int = 4;
+		/**
+		 * @private
+		 */		
+		public static const COMPRESSION_REDUCED_4:int = 5;
+		/**
+		 * @private
+		 */		
+		public static const COMPRESSION_IMPLODED:int = 6;
+		/**
+		 * @private
+		 */		
+		public static const COMPRESSION_TOKENIZED:int = 7;
+		/**
+		 * @private
+		 */		
+		public static const COMPRESSION_DEFLATED:int = 8;
+		/**
+		 * @private
+		 */		
+		public static const COMPRESSION_DEFLATED_EXT:int = 9;
+		/**
+		 * @private
+		 */		
+		public static const COMPRESSION_IMPLODED_PKWARE:int = 10;
+
+		/**
+		 * @private
+		 */		
+		protected static var HAS_UNCOMPRESS:Boolean = (describeType(ByteArray).factory.method.(@name == "uncompress").parameter.length() > 0);
+		/**
+		 * @private
+		 */		
+		protected static var HAS_INFLATE:Boolean = (describeType(ByteArray).factory.method.(@name == "inflate").length() > 0);
+		
+		/**
+		 * Constructor
+		 */		
+		public function FZipFile(filenameEncoding:String = "utf-8") {
+			_filenameEncoding = filenameEncoding;
+			_extraFields = new Dictionary();
+			_content = new ByteArray();
+			_content.endian = Endian.BIG_ENDIAN;
+		}
+		
+		/**
+		 * The Date and time the file was created.
+		 */
+		public function get date():Date {
+			return _date;
+		}
+		public function set date(value:Date):void {
+			_date = (value != null) ? value : new Date();
+		}
+		
+		/**
+		 * The file name (including relative path).
+		 */
+		public function get filename():String {
+			return _filename;
+		}
+		public function set filename(value:String):void {
+			_filename = value;
+		}
+		
+		/**
+		 * Whether this file has a data descriptor or not (only used internally).
+		 */
+		internal function get hasDataDescriptor():Boolean {
+			return _hasDataDescriptor;
+		}
+
+		/**
+		 * The raw, uncompressed file. 
+		 */
+		public function get content():ByteArray {
+			if(isCompressed) {
+				uncompress();
+			}
+			return _content;
+		}
+		public function set content(data:ByteArray):void {
+			setContent(data);
+		}
+		
+		/**
+		 * Sets the file's content as ByteArray.
+		 * 
+		 * @param data The new content.
+		 * @param doCompress Compress the data after adding.
+		 */
+		public function setContent(data:ByteArray, doCompress:Boolean = true):void {
+			if(data != null && data.length > 0) {
+				data.position = 0;
+				data.readBytes(_content, 0, data.length);
+				_crc32 = ChecksumUtil.CRC32(_content);
+				_hasAdler32 = false;
+			} else {
+				_content.length = 0;
+				_content.position = 0;
+				isCompressed = false;
+			}
+			if(doCompress) {
+				compress();
+			} else {
+				_sizeUncompressed = _sizeCompressed = _content.length;
+			}
+		}
+		
+		/**
+		 * The ZIP specification version supported by the software 
+		 * used to encode the file.
+		 */
+		public function get versionNumber():String {
+			return _versionNumber;
+		}
+		
+		/**
+		 * The size of the compressed file (in bytes).
+		 */
+		public function get sizeCompressed():uint {
+			return _sizeCompressed;
+		}
+		
+		/**
+		 * The size of the uncompressed file (in bytes).
+		 */
+		public function get sizeUncompressed():uint {
+			return _sizeUncompressed;
+		}
+		
+		/**
+		 * Gets the files content as string.
+		 * 
+		 * @param recompress If <code>true</code>, the raw file content
+		 * is recompressed after decoding the string.
+		 * 
+		 * @param charset The character set used for decoding.
+		 * 
+		 * @return The file as string.
+		 */
+		public function getContentAsString(recompress:Boolean = true, charset:String = "utf-8"):String {
+			if(isCompressed) {
+				uncompress();
+			}
+			_content.position = 0;
+			var str:String;
+			// Is readMultiByte completely trustworthy with utf-8?
+			// For now, readUTFBytes will take over.
+			if(charset == "utf-8") {
+				str = _content.readUTFBytes(_content.bytesAvailable);
+			} else {
+				str = _content.readMultiByte(_content.bytesAvailable, charset);
+			}
+			_content.position = 0;
+			if(recompress) {
+				compress();
+			}
+			return str;
+		}
+
+		/**
+		 * Sets a string as the file's content.
+		 * 
+		 * @param value The string.
+		 * @param charset The character set used for decoding.
+		 * @param doCompress Compress the string after adding.
+		 */
+		public function setContentAsString(value:String, charset:String = "utf-8", doCompress:Boolean = true):void {
+			_content.length = 0;
+			_content.position = 0;
+			isCompressed = false;
+			if(value != null && value.length > 0) {
+				if(charset == "utf-8") {
+					_content.writeUTFBytes(value);
+				} else {
+					_content.writeMultiByte(value, charset);
+				}
+				_crc32 = ChecksumUtil.CRC32(_content);
+				_hasAdler32 = false;
+			}
+			if(doCompress) {
+				compress();
+			} else {
+				_sizeUncompressed = _sizeCompressed = _content.length;
+			}
+		}
+
+		/**
+		 * Serializes this zip archive into an IDataOutput stream (such as 
+		 * ByteArray or FileStream) according to PKZIP APPNOTE.TXT
+		 * 
+		 * @param stream The stream to serialize the zip archive into.
+		 * @param includeAdler32 If set to true, include Adler32 checksum.
+		 * @param centralDir If set to true, serialize a central directory entry
+		 * @param centralDirOffset Relative offset of local header (for central directory only).
+		 * 
+		 * @return The number of bytes written to the stream.
+		 */
+		public function serialize(stream:IDataOutput, includeAdler32:Boolean, centralDir:Boolean = false, centralDirOffset:uint = 0):uint {
+			if(stream == null) { return 0; }
+			if(centralDir) {
+				// Write central directory file header signature
+				stream.writeUnsignedInt(FZip.SIG_CENTRAL_FILE_HEADER);
+				// Write "version made by" host (usually 0) and number (always 2.0)
+				stream.writeShort((_versionHost << 8) | 0x14);
+			} else {
+				// Write local file header signature
+				stream.writeUnsignedInt(FZip.SIG_LOCAL_FILE_HEADER);
+			}
+			// Write "version needed to extract" host (usually 0) and number (always 2.0)
+			stream.writeShort((_versionHost << 8) | 0x14);
+			// Write the general purpose flag
+			// - no encryption
+			// - normal deflate
+			// - no data descriptors
+			// - no compressed patched data
+			// - unicode as specified in _filenameEncoding 
+			stream.writeShort((_filenameEncoding == "utf-8") ? 0x0800 : 0);
+			// Write compression method (always deflate)
+			stream.writeShort(isCompressed ? COMPRESSION_DEFLATED : COMPRESSION_NONE);
+			// Write date
+			var d:Date = (_date != null) ? _date : new Date();
+			var msdosTime:uint = uint(d.getSeconds()) | (uint(d.getMinutes()) << 5) | (uint(d.getHours()) << 11);
+			var msdosDate:uint = uint(d.getDate()) | (uint(d.getMonth() + 1) << 5) | (uint(d.getFullYear() - 1980) << 9);
+			stream.writeShort(msdosTime);
+			stream.writeShort(msdosDate);
+			// Write CRC32
+			stream.writeUnsignedInt(_crc32);
+			// Write compressed size
+			stream.writeUnsignedInt(_sizeCompressed);
+			// Write uncompressed size
+			stream.writeUnsignedInt(_sizeUncompressed);
+			// Prep filename
+			var ba:ByteArray = new ByteArray();
+			ba.endian = Endian.LITTLE_ENDIAN;
+			if (_filenameEncoding == "utf-8") {
+				ba.writeUTFBytes(_filename);
+			} else {
+				ba.writeMultiByte(_filename, _filenameEncoding);
+			}
+			var filenameSize:uint = ba.position;
+			// Prep extra fields
+			for(var headerId:Object in _extraFields) {
+				var extraBytes:ByteArray = _extraFields[headerId] as ByteArray;
+				if(extraBytes != null) {
+					ba.writeShort(uint(headerId));
+					ba.writeShort(uint(extraBytes.length));
+					ba.writeBytes(extraBytes);
+				}
+			}
+			if (includeAdler32) {
+				if (!_hasAdler32) {
+					var compressed:Boolean = isCompressed;
+					if (compressed) { uncompress(); }
+					_adler32 = ChecksumUtil.Adler32(_content, 0, _content.length);
+					_hasAdler32 = true;
+					if (compressed) { compress(); }
+				}
+				ba.writeShort(0xdada);
+				ba.writeShort(4);
+				ba.writeUnsignedInt(_adler32);
+			}
+			var extrafieldsSize:uint = ba.position - filenameSize;
+			// Prep comment (currently unused)
+			if(centralDir && _comment.length > 0) {
+				if (_filenameEncoding == "utf-8") {
+					ba.writeUTFBytes(_comment);
+				} else {
+					ba.writeMultiByte(_comment, _filenameEncoding);
+				}
+			}
+			var commentSize:uint = ba.position - filenameSize - extrafieldsSize;
+			// Write filename and extra field sizes
+			stream.writeShort(filenameSize);
+			stream.writeShort(extrafieldsSize);
+			if(centralDir) {
+				// Write comment size
+				stream.writeShort(commentSize);
+				// Write disk number start (always 0)
+				stream.writeShort(0);
+				// Write file attributes (always 0)
+				stream.writeShort(0);
+				stream.writeUnsignedInt(0);
+				// Write relative offset of local header
+				stream.writeUnsignedInt(centralDirOffset);
+			}
+			// Write filename, extra field and comment
+			if(filenameSize + extrafieldsSize + commentSize > 0) {
+				stream.writeBytes(ba);
+			}
+			// Write file
+			var fileSize:uint = 0;
+			if(!centralDir && _content.length > 0) {
+				if(isCompressed) {
+					if(HAS_UNCOMPRESS || HAS_INFLATE) {
+						fileSize = _content.length;
+						stream.writeBytes(_content, 0, fileSize);
+					} else {
+						fileSize = _content.length - 6;
+						stream.writeBytes(_content, 2, fileSize);
+					}
+				} else {
+					fileSize = _content.length;
+					stream.writeBytes(_content, 0, fileSize);
+				}
+			}
+			var size:uint = 30 + filenameSize + extrafieldsSize + commentSize + fileSize;
+			if(centralDir) {
+				size += 16;
+			}
+			return size;
+		} 
+
+
+		/**
+		 * @private
+		 */		
+		internal function parse(stream:IDataInput):Boolean {
+			while (stream.bytesAvailable && parseFunc(stream)) {}
+			return (parseFunc === parseFileIdle);
+		}
+
+		/**
+		 * @private
+		 */		
+		protected function parseFileIdle(stream:IDataInput):Boolean {
+			return false;
+		}
+
+		/**
+		 * @private
+		 */		
+		protected function parseFileHead(stream:IDataInput):Boolean {
+			if(stream.bytesAvailable >= 30) {
+				parseHead(stream);
+				if(_sizeFilename + _sizeExtra > 0) {
+					parseFunc = parseFileHeadExt;
+				} else {
+					parseFunc = parseFileContent;
+				}
+				return true;
+			}
+			return false;
+		}
+
+		/**
+		 * @private
+		 */		
+		protected function parseFileHeadExt(stream:IDataInput):Boolean {
+			if(stream.bytesAvailable >= _sizeFilename + _sizeExtra) {
+				parseHeadExt(stream);
+				parseFunc = parseFileContent;
+				return true;
+			}
+			return false;
+		}
+		
+		/**
+		 * @private
+		 */		
+		protected function parseFileContent(stream:IDataInput):Boolean {
+			var continueParsing:Boolean = true;
+			if(_hasDataDescriptor) {
+				// If the file has a data descriptor, bail out.
+				// We first need to figure out the length of the file. 
+				// See FZip::parseLocalfile()
+				parseFunc = parseFileIdle;
+				continueParsing = false;
+			} else if(_sizeCompressed == 0) {
+				// This entry has no file attached
+				parseFunc = parseFileIdle;
+			} else if(stream.bytesAvailable >= _sizeCompressed) {
+				parseContent(stream);
+				parseFunc = parseFileIdle;
+			} else {
+				continueParsing = false;
+			}
+			return continueParsing;
+		}
+
+		/**
+		 * @private
+		 */		
+		protected function parseHead(data:IDataInput):void {
+			var vSrc:uint = data.readUnsignedShort();
+			_versionHost = vSrc >> 8;
+			_versionNumber = Math.floor((vSrc & 0xff) / 10) + "." + ((vSrc & 0xff) % 10);
+			var flag:uint = data.readUnsignedShort();
+			_compressionMethod = data.readUnsignedShort();
+			_encrypted = (flag & 0x01) !== 0;
+			_hasDataDescriptor = (flag & 0x08) !== 0;
+			_hasCompressedPatchedData = (flag & 0x20) !== 0;
+			if ((flag & 800) !== 0) {
+				_filenameEncoding = "utf-8";
+			}
+			if(_compressionMethod === COMPRESSION_IMPLODED) {
+				_implodeDictSize = (flag & 0x02) !== 0 ? 8192 : 4096;
+				_implodeShannonFanoTrees = (flag & 0x04) !== 0 ? 3 : 2;
+			} else if(_compressionMethod === COMPRESSION_DEFLATED) {
+				_deflateSpeedOption = (flag & 0x06) >> 1;
+			}
+			var msdosTime:uint = data.readUnsignedShort();
+			var msdosDate:uint = data.readUnsignedShort();
+			var sec:int = (msdosTime & 0x001f);
+			var min:int = (msdosTime & 0x07e0) >> 5;
+			var hour:int = (msdosTime & 0xf800) >> 11;
+			var day:int = (msdosDate & 0x001f);
+			var month:int = (msdosDate & 0x01e0) >> 5;
+			var year:int = ((msdosDate & 0xfe00) >> 9) + 1980;
+			_date = new Date(year, month - 1, day, hour, min, sec, 0);
+			_crc32 = data.readUnsignedInt();
+			_sizeCompressed = data.readUnsignedInt();
+			_sizeUncompressed = data.readUnsignedInt();
+			_sizeFilename = data.readUnsignedShort();
+			_sizeExtra = data.readUnsignedShort();
+		}
+		
+		/**
+		 * @private
+		 */		
+		protected function parseHeadExt(data:IDataInput):void {
+			if (_filenameEncoding == "utf-8") {
+				_filename = data.readUTFBytes(_sizeFilename);// Fixes a bug in some players
+			} else {
+				_filename = data.readMultiByte(_sizeFilename, _filenameEncoding);
+			}
+			var bytesLeft:uint = _sizeExtra;
+			while(bytesLeft > 4) {
+				var headerId:uint = data.readUnsignedShort();
+				var dataSize:uint = data.readUnsignedShort();
+				if(dataSize > bytesLeft) {
+					throw new Error("Parse error in file " + _filename + ": Extra field data size too big.");
+				}
+				if(headerId === 0xdada && dataSize === 4) {
+					_adler32 = data.readUnsignedInt();
+					_hasAdler32 = true;
+				} else if(dataSize > 0) {
+					var extraBytes:ByteArray = new ByteArray();
+					data.readBytes(extraBytes, 0, dataSize);
+					_extraFields[headerId] = extraBytes;
+				}
+				bytesLeft -= dataSize + 4;
+			}
+			if(bytesLeft > 0) {
+				data.readBytes(new ByteArray(), 0, bytesLeft);
+			}
+		}
+
+		/**
+		 * @private
+		 */		
+		internal function parseContent(data:IDataInput):void {
+			if(_compressionMethod === COMPRESSION_DEFLATED && !_encrypted) {
+				if(HAS_UNCOMPRESS || HAS_INFLATE) {
+					// Adobe Air supports inflate decompression.
+					// If we got here, this is an Air application
+					// and we can decompress without using the Adler32 hack
+					// so we just write out the raw deflate compressed file
+					data.readBytes(_content, 0, _sizeCompressed);
+				} else if(_hasAdler32) {
+					// Add zlib header
+					// CMF (compression method and info)
+					_content.writeByte(0x78);
+					// FLG (compression level, preset dict, checkbits)
+					var flg:uint = (~_deflateSpeedOption << 6) & 0xc0;
+					flg += 31 - (((0x78 << 8) | flg) % 31);
+					_content.writeByte(flg);
+					// Add raw deflate-compressed file
+					data.readBytes(_content, 2, _sizeCompressed);
+					// Add adler32 checksum
+					_content.position = _content.length;
+					_content.writeUnsignedInt(_adler32);
+				} else {
+					throw new Error("Adler32 checksum not found.");
+				}
+				isCompressed = true;
+			} else if(_compressionMethod == COMPRESSION_NONE) {
+				data.readBytes(_content, 0, _sizeCompressed);
+				isCompressed = false;
+			} else {
+				throw new Error("Compression method " + _compressionMethod + " is not supported.");
+			}
+			_content.position = 0;
+		}
+		
+		/**
+		 * @private
+		 */		
+		protected function compress():void {
+			if(!isCompressed) {
+				if(_content.length > 0) {
+					_content.position = 0;
+					_sizeUncompressed = _content.length;
+					if(HAS_INFLATE) {
+						_content.deflate();
+						_sizeCompressed = _content.length;
+					} else if(HAS_UNCOMPRESS) {
+						_content.compress.apply(_content, ["deflate"]);
+						_sizeCompressed = _content.length;
+					} else {
+						_content.compress();
+						_sizeCompressed = _content.length - 6;
+					}
+					_content.position = 0;
+					isCompressed = true;
+				} else {
+					_sizeCompressed = 0;
+					_sizeUncompressed = 0;
+				}
+			}
+		}
+		
+		/**
+		 * @private
+		 */		
+		protected function uncompress():void {
+			if(isCompressed && _content.length > 0) {
+				_content.position = 0;
+				if(HAS_INFLATE) {
+					_content.inflate();
+				} else if(HAS_UNCOMPRESS) {
+					_content.uncompress.apply(_content, ["deflate"]);
+				} else {
+					_content.uncompress();
+				}
+				_content.position = 0;
+				isCompressed = false;
+			}
+		}
+		
+		/**
+		 * Returns a string representation of the FZipFile object.
+		 */		
+		public function toString():String {
+			return "[FZipFile]"
+				+ "\n  name:" + _filename
+				+ "\n  date:" + _date
+				+ "\n  sizeCompressed:" + _sizeCompressed
+				+ "\n  sizeUncompressed:" + _sizeUncompressed
+				+ "\n  versionHost:" + _versionHost
+				+ "\n  versionNumber:" + _versionNumber
+				+ "\n  compressionMethod:" + _compressionMethod
+				+ "\n  encrypted:" + _encrypted
+				+ "\n  hasDataDescriptor:" + _hasDataDescriptor
+				+ "\n  hasCompressedPatchedData:" + _hasCompressedPatchedData
+				+ "\n  filenameEncoding:" + _filenameEncoding
+				+ "\n  crc32:" + _crc32.toString(16)
+				+ "\n  adler32:" + _adler32.toString(16);
+		}
+	}
+}

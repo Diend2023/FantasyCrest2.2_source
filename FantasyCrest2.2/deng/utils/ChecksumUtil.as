@@ -1,96 +1,81 @@
 package deng.utils
 {
-   import flash.utils.ByteArray;
-   
-   public class ChecksumUtil
-   {
-      
-      private static var crcTable:Array = makeCRCTable();
-      
-      public function ChecksumUtil()
-      {
-         super();
-      }
-      
-      private static function makeCRCTable() : Array
-      {
-         var _loc2_:uint = 0;
-         var _loc3_:uint = 0;
-         var _loc4_:uint = 0;
-         var _loc1_:Array = [];
-         _loc2_ = 0;
-         while(_loc2_ < 256)
-         {
-            _loc4_ = _loc2_;
-            _loc3_ = 0;
-            while(_loc3_ < 8)
-            {
-               if(_loc4_ & 1)
-               {
-                  _loc4_ = uint(0xEDB88320 ^ _loc4_ >>> 1);
-               }
-               else
-               {
-                  _loc4_ >>>= 1;
-               }
-               _loc3_++;
-            }
-            _loc1_.push(_loc4_);
-            _loc2_++;
-         }
-         return _loc1_;
-      }
-      
-      public static function CRC32(param1:ByteArray, param2:uint = 0, param3:uint = 0) : uint
-      {
-         var _loc4_:uint = 0;
-         if(param2 >= param1.length)
-         {
-            param2 = param1.length;
-         }
-         if(param3 == 0)
-         {
-            param3 = param1.length - param2;
-         }
-         if(param3 + param2 > param1.length)
-         {
-            param3 = param1.length - param2;
-         }
-         var _loc5_:uint = 4294967295;
-         _loc4_ = param2;
-         while(_loc4_ < param3)
-         {
-            _loc5_ = uint(uint(crcTable[(_loc5_ ^ param1[_loc4_]) & 0xFF]) ^ _loc5_ >>> 8);
-            _loc4_++;
-         }
-         return _loc5_ ^ 0xFFFFFFFF;
-      }
-      
-      public static function Adler32(param1:ByteArray, param2:uint = 0, param3:uint = 0) : uint
-      {
-         if(param2 >= param1.length)
-         {
-            param2 = param1.length;
-         }
-         if(param3 == 0)
-         {
-            param3 = param1.length - param2;
-         }
-         if(param3 + param2 > param1.length)
-         {
-            param3 = param1.length - param2;
-         }
-         var _loc4_:uint = param2;
-         var _loc5_:uint = 1;
-         var _loc6_:uint = 0;
-         while(_loc4_ < param2 + param3)
-         {
-            _loc5_ = (_loc5_ + param1[_loc4_]) % 65521;
-            _loc6_ = (_loc5_ + _loc6_) % 65521;
-            _loc4_++;
-         }
-         return _loc6_ << 16 | _loc5_;
-      }
-   }
+	import flash.utils.ByteArray;
+	
+	public class ChecksumUtil
+	{
+		/**
+		 * @private
+		 */		
+		private static var crcTable:Array = makeCRCTable();
+		
+		/**
+		 * @private
+		 */		
+		private static function makeCRCTable():Array {
+			var table:Array = [];
+			var i:uint;
+			var j:uint;
+			var c:uint;
+			for (i = 0; i < 256; i++) {
+				c = i;
+				for (j = 0; j < 8; j++) {
+					if (c & 1) {
+						c = 0xEDB88320 ^ (c >>> 1);
+					} else {
+						c >>>= 1;
+					}
+				}
+				table.push(c);
+			}
+			return table;
+		}
+		
+		/**
+		 * Calculates a CRC-32 checksum over a ByteArray
+		 * 
+		 * @see http://www.w3.org/TR/PNG/#D-CRCAppendix
+		 * 
+		 * @param data 
+		 * @param len
+		 * @param start
+		 * @return CRC-32 checksum
+		 */		
+		public static function CRC32(data:ByteArray, start:uint = 0, len:uint = 0):uint {
+			if (start >= data.length) { start = data.length; }
+			if (len == 0) { len = data.length - start; }
+			if (len + start > data.length) { len = data.length - start; }
+			var i:uint;
+			var c:uint = 0xffffffff;
+			for (i = start; i < len; i++) {
+				c = uint(crcTable[(c ^ data[i]) & 0xff]) ^ (c >>> 8);
+			}
+			return (c ^ 0xffffffff);
+		}
+		
+		/**
+		 * Calculates an Adler-32 checksum over a ByteArray
+		 * 
+		 * @see http://en.wikipedia.org/wiki/Adler-32#Example_implementation
+		 * 
+		 * @param data 
+		 * @param len
+		 * @param start
+		 * @return Adler-32 checksum
+		 */		
+		public static function Adler32(data:ByteArray, start:uint = 0, len:uint = 0):uint {
+			if (start >= data.length) { start = data.length; }
+			if (len == 0) { len = data.length - start; }
+			if (len + start > data.length) { len = data.length - start; }
+			var i:uint = start;
+			var a:uint = 1;
+			var b:uint = 0;
+			while (i < (start + len)) {
+				a = (a + data[i]) % 65521;
+				b = (a + b) % 65521;
+				i++;
+			}
+			return (b << 16) | a;
+		}
+	}
 }
-

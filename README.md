@@ -9,7 +9,7 @@ FantasyCrest2.2_source/
 ├── FantasyCrest2.2/            # 游戏源码 + 素材工程
 │   └── FantasyCrest2.2/        # ★ 素材工程（未压缩 XFL，等价于 FLA）
 ├── fonts/                      # 发布前需要安装的字体
-├── removed/                    # 被替换 / 移出的旧文件（不参与编译）
+├── removed/                    # 被替换的旧文件（不参与编译）
 ├── LICENSE
 └── README.md
 ```
@@ -25,6 +25,10 @@ FantasyCrest2.2_source/
 - **jindrapetrik** - [jpexs-decompiler](https://github.com/jindrapetrik/jpexs-decompiler)
 - **gskinner** - [GTween](https://github.com/gskinner/GTween)
 - **spjwebster** - [as3base64](https://github.com/spjwebster/as3base64)
+- **claus** - [fzip](https://github.com/claus/fzip)
+- **CovertLab** - [NetworkPainter](https://github.com/CovertLab/NetworkPainter/tree/master/src/org/gif)
+- **mrdoob** - [Hi-ReS-Stats](https://github.com/mrdoob/Hi-ReS-Stats)
+- **superkaka** - [Fps](https://github.com/linchenrr/flash/blob/master/project/KLib/src/org/superkaka/KLib/debug/Fps.as)
 
 ## 声明
 

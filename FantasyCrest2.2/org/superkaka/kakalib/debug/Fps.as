@@ -1,65 +1,82 @@
+// package org.superkaka.KLib.debug 
 package org.superkaka.kakalib.debug
 {
-   import flash.display.Sprite;
-   import flash.events.Event;
-   import flash.events.KeyboardEvent;
-   
-   public class Fps
-   {
-      
-      private static var _stats:Stats;
-      
-      private static var _target:Sprite;
-      
-      public function Fps()
-      {
-         super();
-      }
-      
-      public static function setup(param1:Sprite) : void
-      {
-         _target = param1;
-         _stats = new Stats();
-         if(_target.stage != null)
-         {
-            start();
-         }
-         else
-         {
-            _target.addEventListener(Event.ADDED_TO_STAGE,start);
-         }
-      }
-      
-      public static function set visible(param1:Boolean) : void
-      {
-         if(param1)
-         {
-            _target.addChild(_stats);
-            _stats.y = 500 - _stats.height;
-         }
-         else if(_stats.parent != null)
-         {
-            _stats.parent.removeChild(_stats);
-         }
-      }
-      
-      public static function get visible() : Boolean
-      {
-         return _target.contains(_stats);
-      }
-      
-      private static function start(param1:Event = null) : void
-      {
-         _target.stage.addEventListener(KeyboardEvent.KEY_DOWN,onKeyDownHandler);
-      }
-      
-      private static function onKeyDownHandler(param1:KeyboardEvent) : void
-      {
-         if(param1.shiftKey && param1.keyCode == 68)
-         {
-            visible = !visible;
-         }
-      }
-   }
-}
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	/**
+	 * 程序运行时帧数、内存信息显示
+	 * @author ｋａｋａ
+	 */
+	public class Fps
+	{
+		
+		static private var _stats:Stats;
+		static private var _target:Sprite;
+		
+		static public function setup(target:Sprite):void
+		{
+			
+			_target = target;
+			
+			_stats = new Stats();
+			
+			if (_target.stage != null)
+			{
+				
+				start();
+				
+			}
+			else
+			{
+				
+				_target.addEventListener(Event.ADDED_TO_STAGE, start);
+				
+			}
+			
+		}
+		
+		static public function set visible(value:Boolean):void
+		{
+			
+			if (value)
+			{
+				_target.addChild(_stats);
+			}
+			else
+			{
+				if (_stats.parent != null)
+				_stats.parent.removeChild(_stats);
+			}
+			
+		}
+		
+		static public function get visible():Boolean
+		{
+			
+			return _target.contains(_stats);
+			
+		}
+		
+		static private function start(evt:Event = null):void
+		{
+			
+			_target.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDownHandler);
+			
+		}
+		
+		static private function onKeyDownHandler(evt:KeyboardEvent):void
+		{
+			
+			if (evt.shiftKey && evt.keyCode == 68)
+			{
+				
+				visible = !visible;
+				
+			}
+			
+		}
+		
+	}
 
+}

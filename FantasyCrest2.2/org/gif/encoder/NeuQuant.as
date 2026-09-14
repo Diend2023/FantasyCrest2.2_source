@@ -1,540 +1,670 @@
+/*
+* NeuQuant Neural-Net Quantization Algorithm
+* ------------------------------------------
+* 
+* Copyright (c) 1994 Anthony Dekker
+* 
+* NEUQUANT Neural-Net quantization algorithm by Anthony Dekker, 1994. See
+* "Kohonen neural networks for optimal colour quantization" in "Network:
+* Computation in Neural Systems" Vol. 5 (1994) pp 351-367. for a discussion of
+* the algorithm.
+* 
+* Any party obtaining a copy of these files from the author, directly or
+* indirectly, is granted, free of charge, a full and unrestricted irrevocable,
+* world-wide, paid up, royalty-free, nonexclusive right and license to deal in
+* this software and documentation files (the "Software"), including without
+* limitation the rights to use, copy, modify, merge, publish, distribute,
+* sublicense, and/or sell copies of the Software, and to permit persons who
+* receive copies from any such party to do so, with the only requirement being
+* that this copyright notice remain intact.
+*/
+ 
+/*
+* This class handles Neural-Net quantization algorithm
+* @author Kevin Weiner (original Java version - kweiner@fmsware.com)
+* @author Thibault Imbert (AS3 version - bytearray.org)
+* @version 0.1 AS3 implementation
+*/
+
 package org.gif.encoder
 {
-   import flash.utils.*;
-   
-   public class NeuQuant
-   {
-      
-      private static var netsize:int = 256;
-      
-      private static var prime1:int = 499;
-      
-      private static var prime2:int = 491;
-      
-      private static var prime3:int = 487;
-      
-      private static var prime4:int = 503;
-      
-      private static var minpicturebytes:int = 3 * prime4;
-      
-      private static var maxnetpos:int = netsize - 1;
-      
-      private static var netbiasshift:int = 4;
-      
-      private static var ncycles:int = 100;
-      
-      private static var intbiasshift:int = 16;
-      
-      private static var intbias:int = 1 << intbiasshift;
-      
-      private static var gammashift:int = 10;
-      
-      private static var gamma:int = 1 << gammashift;
-      
-      private static var betashift:int = 10;
-      
-      private static var beta:int = intbias >> betashift;
-      
-      private static var betagamma:int = intbias << gammashift - betashift;
-      
-      private static var initrad:int = netsize >> 3;
-      
-      private static var radiusbiasshift:int = 6;
-      
-      private static var radiusbias:int = 1 << radiusbiasshift;
-      
-      private static var initradius:int = initrad * radiusbias;
-      
-      private static var radiusdec:int = 30;
-      
-      private static var alphabiasshift:int = 10;
-      
-      private static var initalpha:int = 1 << alphabiasshift;
-      
-      private static var radbiasshift:int = 8;
-      
-      private static var radbias:int = 1 << radbiasshift;
-      
-      private static var alpharadbshift:int = alphabiasshift + radbiasshift;
-      
-      private static var alpharadbias:int = 1 << alpharadbshift;
-      
-      private var alphadec:int;
-      
-      private var thepicture:ByteArray;
-      
-      private var lengthcount:int;
-      
-      private var samplefac:int;
-      
-      private var network:Array;
-      
-      protected var netindex:Array;
-      
-      private var bias:Array;
-      
-      private var freq:Array;
-      
-      private var radpower:Array;
-      
-      public function NeuQuant(param1:ByteArray, param2:int, param3:int)
-      {
-         var _loc6_:* = undefined;
-         super();
-         var _loc4_:* = 0;
-         var _loc5_:* = null;
-         this.netindex = new Array();
-         this.bias = new Array();
-         this.freq = new Array();
-         this.radpower = new Array();
-         this.thepicture = param1;
-         this.lengthcount = param2;
-         this.samplefac = param3;
-         this.network = new Array(netsize);
-         _loc4_ = 0;
-         while(_loc4_ < netsize)
-         {
-            this.network[_loc4_] = new Array(4);
-            _loc5_ = this.network[_loc4_];
-            _loc6_ = (_loc4_ << netbiasshift + 8) / netsize;
-            _loc5_[2] = (_loc4_ << netbiasshift + 8) / netsize;
-            _loc5_[1] = _loc6_;
-            _loc5_[0] = _loc6_;
-            this.freq[_loc4_] = intbias / netsize;
-            this.bias[_loc4_] = 0;
-            _loc4_++;
-         }
-      }
-      
-      private function colorMap() : ByteArray
-      {
-         var _loc1_:* = 0;
-         var _loc2_:* = new ByteArray();
-         var _loc3_:* = new Array(netsize);
-         var _loc4_:* = 0;
-         while(_loc4_ < netsize)
-         {
-            _loc3_[this.network[_loc4_][3]] = _loc4_;
-            _loc4_++;
-         }
-         var _loc5_:* = 0;
-         var _loc6_:* = 0;
-         while(_loc6_ < netsize)
-         {
-            _loc1_ = _loc3_[_loc6_];
-            var _loc7_:*;
-            _loc2_[_loc7_ = ++_loc5_] = this.network[_loc1_][0];
-            var _loc8_:*;
-            _loc2_[_loc8_ = ++_loc5_] = this.network[_loc1_][1];
-            var _loc9_:*;
-            _loc2_[_loc9_ = ++_loc5_] = this.network[_loc1_][2];
-            _loc6_++;
-         }
-         return _loc2_;
-      }
-      
-      private function inxbuild() : void
-      {
-         var _loc1_:* = 0;
-         var _loc2_:* = 0;
-         var _loc3_:* = 0;
-         var _loc4_:* = 0;
-         var _loc5_:* = null;
-         var _loc6_:* = null;
-         var _loc7_:* = 0;
-         var _loc8_:* = 0;
-         _loc7_ = 0;
-         _loc8_ = 0;
-         _loc1_ = 0;
-         while(_loc1_ < netsize)
-         {
-            _loc5_ = this.network[_loc1_];
-            _loc3_ = _loc1_;
-            _loc4_ = _loc5_[1];
-            _loc2_ = _loc1_ + 1;
-            while(_loc2_ < netsize)
-            {
-               _loc6_ = this.network[_loc2_];
-               if(_loc6_[1] < _loc4_)
-               {
-                  _loc3_ = _loc2_;
-                  _loc4_ = _loc6_[1];
-               }
-               _loc2_++;
-            }
-            _loc6_ = this.network[_loc3_];
-            if(_loc1_ != _loc3_)
-            {
-               _loc2_ = _loc6_[0];
-               _loc6_[0] = _loc5_[0];
-               _loc5_[0] = _loc2_;
-               _loc2_ = _loc6_[1];
-               _loc6_[1] = _loc5_[1];
-               _loc5_[1] = _loc2_;
-               _loc2_ = _loc6_[2];
-               _loc6_[2] = _loc5_[2];
-               _loc5_[2] = _loc2_;
-               _loc2_ = _loc6_[3];
-               _loc6_[3] = _loc5_[3];
-               _loc5_[3] = _loc2_;
-            }
-            if(_loc4_ != _loc7_)
-            {
-               this.netindex[_loc7_] = _loc8_ + _loc1_ >> 1;
-               _loc2_ = _loc7_ + 1;
-               while(_loc2_ < _loc4_)
-               {
-                  this.netindex[_loc2_] = _loc1_;
-                  _loc2_++;
-               }
-               _loc7_ = _loc4_;
-               _loc8_ = _loc1_;
-            }
-            _loc1_++;
-         }
-         this.netindex[_loc7_] = _loc8_ + maxnetpos >> 1;
-         _loc2_ = _loc7_ + 1;
-         while(_loc2_ < 256)
-         {
-            this.netindex[_loc2_] = maxnetpos;
-            _loc2_++;
-         }
-      }
-      
-      private function learn() : void
-      {
-         var _loc1_:* = 0;
-         var _loc2_:* = 0;
-         var _loc3_:* = 0;
-         var _loc4_:* = 0;
-         var _loc5_:* = 0;
-         var _loc6_:* = 0;
-         var _loc7_:* = 0;
-         var _loc8_:* = 0;
-         var _loc9_:* = 0;
-         var _loc10_:* = 0;
-         var _loc11_:* = 0;
-         var _loc12_:* = null;
-         var _loc13_:* = 0;
-         var _loc14_:* = 0;
-         if(this.lengthcount < minpicturebytes)
-         {
-            this.samplefac = 1;
-         }
-         this.alphadec = 30 + (this.samplefac - 1) / 3;
-         _loc12_ = this.thepicture;
-         _loc13_ = 0;
-         _loc14_ = this.lengthcount;
-         _loc11_ = this.lengthcount / (3 * this.samplefac);
-         _loc10_ = _loc11_ / ncycles;
-         _loc8_ = initalpha;
-         _loc6_ = initradius;
-         _loc7_ = _loc6_ >> radiusbiasshift;
-         if(_loc7_ <= 1)
-         {
-            _loc7_ = 0;
-         }
-         _loc1_ = 0;
-         while(_loc1_ < _loc7_)
-         {
-            this.radpower[_loc1_] = _loc8_ * ((_loc7_ * _loc7_ - _loc1_ * _loc1_) * radbias / (_loc7_ * _loc7_));
-            _loc1_++;
-         }
-         if(this.lengthcount < minpicturebytes)
-         {
-            _loc9_ = 3;
-         }
-         else if(this.lengthcount % prime1 != 0)
-         {
-            _loc9_ = 3 * prime1;
-         }
-         else if(this.lengthcount % prime2 != 0)
-         {
-            _loc9_ = 3 * prime2;
-         }
-         else if(this.lengthcount % prime3 != 0)
-         {
-            _loc9_ = 3 * prime3;
-         }
-         else
-         {
-            _loc9_ = 3 * prime4;
-         }
-         _loc1_ = 0;
-         while(_loc1_ < _loc11_)
-         {
-            _loc3_ = (_loc12_[_loc13_ + 0] & 0xFF) << netbiasshift;
-            _loc4_ = (_loc12_[_loc13_ + 1] & 0xFF) << netbiasshift;
-            _loc5_ = (_loc12_[_loc13_ + 2] & 0xFF) << netbiasshift;
-            _loc2_ = this.contest(_loc3_,_loc4_,_loc5_);
-            this.altersingle(_loc8_,_loc2_,_loc3_,_loc4_,_loc5_);
-            if(_loc7_ != 0)
-            {
-               this.alterneigh(_loc7_,_loc2_,_loc3_,_loc4_,_loc5_);
-            }
-            _loc13_ += _loc9_;
-            if(_loc13_ >= _loc14_)
-            {
-               _loc13_ -= this.lengthcount;
-            }
-            _loc1_++;
-            if(_loc10_ == 0)
-            {
-               _loc10_ = 1;
-            }
-            if(_loc1_ % _loc10_ == 0)
-            {
-               _loc8_ -= _loc8_ / this.alphadec;
-               _loc6_ -= _loc6_ / radiusdec;
-               _loc7_ = _loc6_ >> radiusbiasshift;
-               if(_loc7_ <= 1)
-               {
-                  _loc7_ = 0;
-               }
-               _loc2_ = 0;
-               while(_loc2_ < _loc7_)
-               {
-                  this.radpower[_loc2_] = _loc8_ * ((_loc7_ * _loc7_ - _loc2_ * _loc2_) * radbias / (_loc7_ * _loc7_));
-                  _loc2_++;
-               }
-            }
-         }
-      }
-      
-      public function map(param1:int, param2:int, param3:int) : int
-      {
-         var _loc4_:* = 0;
-         var _loc5_:* = 0;
-         var _loc6_:* = 0;
-         var _loc7_:* = 0;
-         var _loc8_:* = 0;
-         var _loc9_:* = null;
-         var _loc10_:* = 0;
-         _loc8_ = 1000;
-         _loc10_ = -1;
-         _loc4_ = this.netindex[param2];
-         _loc5_ = _loc4_ - 1;
-         while(_loc4_ < netsize || _loc5_ >= 0)
-         {
-            if(_loc4_ < netsize)
-            {
-               _loc9_ = this.network[_loc4_];
-               _loc6_ = _loc9_[1] - param2;
-               if(_loc6_ >= _loc8_)
-               {
-                  _loc4_ = netsize;
-               }
-               else
-               {
-                  _loc4_++;
-                  if(_loc6_ < 0)
-                  {
-                     _loc6_ = -_loc6_;
-                  }
-                  _loc7_ = _loc9_[0] - param1;
-                  if(_loc7_ < 0)
-                  {
-                     _loc7_ = -_loc7_;
-                  }
-                  _loc6_ += _loc7_;
-                  if(_loc6_ < _loc8_)
-                  {
-                     _loc7_ = _loc9_[2] - param3;
-                     if(_loc7_ < 0)
-                     {
-                        _loc7_ = -_loc7_;
-                     }
-                     _loc6_ += _loc7_;
-                     if(_loc6_ < _loc8_)
-                     {
-                        _loc8_ = _loc6_;
-                        _loc10_ = _loc9_[3];
-                     }
-                  }
-               }
-            }
-            if(_loc5_ >= 0)
-            {
-               _loc9_ = this.network[_loc5_];
-               _loc6_ = param2 - _loc9_[1];
-               if(_loc6_ >= _loc8_)
-               {
-                  _loc5_ = -1;
-               }
-               else
-               {
-                  _loc5_--;
-                  if(_loc6_ < 0)
-                  {
-                     _loc6_ = -_loc6_;
-                  }
-                  _loc7_ = _loc9_[0] - param1;
-                  if(_loc7_ < 0)
-                  {
-                     _loc7_ = -_loc7_;
-                  }
-                  _loc6_ += _loc7_;
-                  if(_loc6_ < _loc8_)
-                  {
-                     _loc7_ = _loc9_[2] - param3;
-                     if(_loc7_ < 0)
-                     {
-                        _loc7_ = -_loc7_;
-                     }
-                     _loc6_ += _loc7_;
-                     if(_loc6_ < _loc8_)
-                     {
-                        _loc8_ = _loc6_;
-                        _loc10_ = _loc9_[3];
-                     }
-                  }
-               }
-            }
-         }
-         return _loc10_;
-      }
-      
-      public function process() : ByteArray
-      {
-         this.learn();
-         this.unbiasnet();
-         this.inxbuild();
-         return this.colorMap();
-      }
-      
-      private function unbiasnet() : void
-      {
-         var _loc1_:* = 0;
-         var _loc2_:* = 0;
-         _loc1_ = 0;
-         while(_loc1_ < netsize)
-         {
-            this.network[_loc1_][0] >>= netbiasshift;
-            this.network[_loc1_][1] >>= netbiasshift;
-            this.network[_loc1_][2] >>= netbiasshift;
-            this.network[_loc1_][3] = _loc1_;
-            _loc1_++;
-         }
-      }
-      
-      private function alterneigh(param1:int, param2:int, param3:int, param4:int, param5:int) : void
-      {
-         var _loc6_:* = 0;
-         var _loc7_:* = 0;
-         var _loc8_:* = 0;
-         var _loc9_:* = 0;
-         var _loc10_:* = 0;
-         var _loc11_:* = 0;
-         var _loc12_:* = null;
-         _loc8_ = param2 - param1;
-         if(_loc8_ < -1)
-         {
-            _loc8_ = -1;
-         }
-         _loc9_ = param2 + param1;
-         if(_loc9_ > netsize)
-         {
-            _loc9_ = netsize;
-         }
-         _loc6_ = param2 + 1;
-         _loc7_ = param2 - 1;
-         _loc11_ = 1;
-         do
-         {
-            _loc10_ = this.radpower[_loc11_++];
-            if(_loc6_ < _loc9_)
-            {
-               _loc12_ = this.network[_loc6_++];
-               try
-               {
-                  _loc12_[0] -= _loc10_ * (_loc12_[0] - param3) / alpharadbias;
-                  _loc12_[1] -= _loc10_ * (_loc12_[1] - param4) / alpharadbias;
-                  _loc12_[2] -= _loc10_ * (_loc12_[2] - param5) / alpharadbias;
-               }
-               catch(e:Error)
-               {
-               }
-            }
-            if(_loc7_ > _loc8_)
-            {
-               _loc12_ = this.network[_loc7_--];
-               try
-               {
-                  _loc12_[0] -= _loc10_ * (_loc12_[0] - param3) / alpharadbias;
-                  _loc12_[1] -= _loc10_ * (_loc12_[1] - param4) / alpharadbias;
-                  _loc12_[2] -= _loc10_ * (_loc12_[2] - param5) / alpharadbias;
-               }
-               catch(e:Error)
-               {
-               }
-            }
-         }
-         while(_loc6_ < _loc9_ || _loc7_ > _loc8_);
-      }
-      
-      private function altersingle(param1:int, param2:int, param3:int, param4:int, param5:int) : void
-      {
-         var _loc6_:* = this.network[param2];
-         _loc6_[0] = _loc6_[0] - param1 * (_loc6_[0] - param3) / initalpha;
-         _loc6_[1] -= param1 * (_loc6_[1] - param4) / initalpha;
-         _loc6_[2] -= param1 * (_loc6_[2] - param5) / initalpha;
-      }
-      
-      private function contest(param1:int, param2:int, param3:int) : int
-      {
-         var _loc4_:* = 0;
-         var _loc5_:* = 0;
-         var _loc6_:* = 0;
-         var _loc7_:* = 0;
-         var _loc8_:* = 0;
-         var _loc9_:* = 0;
-         var _loc10_:* = 0;
-         var _loc11_:* = 0;
-         var _loc12_:* = 0;
-         var _loc13_:* = null;
-         _loc12_ = _loc11_ = ~(1 << 31);
-         _loc10_ = _loc9_ = -1;
-         _loc4_ = 0;
-         while(_loc4_ < netsize)
-         {
-            _loc13_ = this.network[_loc4_];
-            _loc5_ = _loc13_[0] - param1;
-            if(_loc5_ < 0)
-            {
-               _loc5_ = -_loc5_;
-            }
-            _loc6_ = _loc13_[1] - param2;
-            if(_loc6_ < 0)
-            {
-               _loc6_ = -_loc6_;
-            }
-            _loc5_ += _loc6_;
-            _loc6_ = _loc13_[2] - param3;
-            if(_loc6_ < 0)
-            {
-               _loc6_ = -_loc6_;
-            }
-            _loc5_ += _loc6_;
-            if(_loc5_ < _loc11_)
-            {
-               _loc11_ = _loc5_;
-               _loc9_ = _loc4_;
-            }
-            _loc7_ = _loc5_ - (this.bias[_loc4_] >> intbiasshift - netbiasshift);
-            if(_loc7_ < _loc12_)
-            {
-               _loc12_ = _loc7_;
-               _loc10_ = _loc4_;
-            }
-            _loc8_ = this.freq[_loc4_] >> betashift;
-            this.freq[_loc4_] -= _loc8_;
-            this.bias[_loc4_] += _loc8_ << gammashift;
-            _loc4_++;
-         }
-         this.freq[_loc9_] += beta;
-         this.bias[_loc9_] -= betagamma;
-         return _loc10_;
-      }
-   }
-}
+	import flash.utils.ByteArray;
+	
+	public class NeuQuant
+	{
+		
+		private static var netsize:int = 256; /* number of colours used */
+		
+		/* four primes near 500 - assume no image has a length so large */
+		/* that it is divisible by all four primes */
+		
+		private static var prime1:int = 499;
+		private static var prime2:int = 491;
+		private static var prime3:int = 487;
+		private static var prime4:int = 503;
+		private static var minpicturebytes:int = (3 * prime4);
+		
+		/* minimum size for input image */
+		/*
+		* Program Skeleton ---------------- [select samplefac in range 1..30] [read
+		* image from input file] pic = (unsigned char*) malloc(3*width*height);
+		* initnet(pic,3*width*height,samplefac); learn(); unbiasnet(); [write output
+		* image header, using writecolourmap(f)] inxbuild(); write output image using
+		* inxsearch(b,g,r)
+		*/
 
+		/*
+		* Network Definitions -------------------
+		*/
+		
+		private static var maxnetpos:int = (netsize - 1);
+		private static var netbiasshift:int = 4; /* bias for colour values */
+		private static var ncycles:int = 100; /* no. of learning cycles */
+		
+		/* defs for freq and bias */
+		private static var intbiasshift:int = 16; /* bias for fractions */
+		private static var intbias:int = (1 << intbiasshift);
+		private static var gammashift:int = 10; /* gamma = 1024 */
+		private static var gamma:int = (1 << gammashift);
+		private static var betashift:int = 10;
+		private static var beta:int = (intbias >> betashift); /* beta = 1/1024 */
+		private static var betagamma:int = (intbias << (gammashift - betashift));
+		
+		/* defs for decreasing radius factor */
+		private static var initrad:int = (netsize >> 3); /*
+	                                                         * for 256 cols, radius
+	                                                         * starts
+	                                                         */
+															 
+		private static var radiusbiasshift:int = 6; /* at 32.0 biased by 6 bits */
+		private static var radiusbias:int = (1 << radiusbiasshift);
+		private static var initradius:int = (initrad * radiusbias); /*
+	                                                                   * and
+	                                                                   * decreases
+	                                                                   * by a
+	                                                                   */
+																	   
+		private static var radiusdec:int = 30; /* factor of 1/30 each cycle */
+		
+		/* defs for decreasing alpha factor */
+		private static var alphabiasshift:int = 10; /* alpha starts at 1.0 */
+		private static var initalpha:int = (1 << alphabiasshift);
+		private var alphadec:int /* biased by 10 bits */
+		
+		/* radbias and alpharadbias used for radpower calculation */
+		private static var radbiasshift:int = 8;
+		private static var radbias:int = (1 << radbiasshift);
+		private static var alpharadbshift:int = (alphabiasshift + radbiasshift);
+		
+		private static var alpharadbias:int = (1 << alpharadbshift);
+		
+		/*
+		* Types and Global Variables --------------------------
+		*/
+		
+		private var thepicture:ByteArray/* the input image itself */
+		private var lengthcount:int; /* lengthcount = H*W*3 */
+		private var samplefac:int; /* sampling factor 1..30 */
+		
+		// typedef int pixel[4]; /* BGRc */
+		private var network:Array; /* the network itself - [netsize][4] */
+		protected var netindex:Array = new Array();
+		
+		/* for network lookup - really 256 */
+		private var bias:Array = new Array();
+		
+		/* bias and freq arrays for learning */
+		private var freq:Array = new Array();
+		private var radpower:Array = new Array();
+		
+		public function NeuQuant(thepic:ByteArray, len:int, sample:int)
+		{
+			
+			var i:int;
+			var p:Array;
+			
+			thepicture = thepic;
+			lengthcount = len;
+			samplefac = sample;
+			
+			network = new Array(netsize);
+			
+			for (i = 0; i < netsize; i++)
+			{
+				
+				network[i] = new Array(4);
+				p = network[i];
+				p[0] = p[1] = p[2] = (i << (netbiasshift + 8)) / netsize;
+				freq[i] = intbias / netsize; /* 1/netsize */
+				bias[i] = 0;
+			}
+			
+		}
+		
+		private function colorMap():ByteArray
+		{
+			
+			var map:ByteArray = new ByteArray;
+		    var index:Array = new Array(netsize);
+		    for (var i:int = 0; i < netsize; i++)
+		      index[network[i][3]] = i;
+		    var k:int = 0;
+		    for (var l:int = 0; l < netsize; l++) {
+		      var j:int = index[l];
+		      map[k++] = (network[j][0]);
+		      map[k++] = (network[j][1]);
+		      map[k++] = (network[j][2]);
+		    }
+		    return map;
+			
+		}
+		
+		/*
+	   * Insertion sort of network and building of netindex[0..255] (to do after
+	   * unbias)
+	   * -------------------------------------------------------------------------------
+	   */
+	   
+	   private function inxbuild():void
+	   {
+		   
+		  var i:int;
+		  var j:int;
+		  var smallpos:int;
+		  var smallval:int;
+		  var p:Array;
+		  var q:Array;
+		  var previouscol:int
+		  var startpos:int
+		  
+		  previouscol = 0;
+		  startpos = 0;
+		  for (i = 0; i < netsize; i++)
+		  {
+			  
+			  p = network[i];
+			  smallpos = i;
+			  smallval = p[1]; /* index on g */
+			  /* find smallest in i..netsize-1 */
+			  for (j = i + 1; j < netsize; j++)
+			  {
+				  q = network[j];
+				  if (q[1] < smallval)
+				  { /* index on g */
+				  
+					smallpos = j;
+					smallval = q[1]; /* index on g */
+				}
+			  }
+			  
+			  q = network[smallpos];
+			  /* swap p (i) and q (smallpos) entries */
+			  
+			  if (i != smallpos)
+			  {
+				  
+				  j = q[0];
+				  q[0] = p[0];
+				  p[0] = j;
+				  j = q[1];
+				  q[1] = p[1];
+				  p[1] = j;
+				  j = q[2];
+				  q[2] = p[2];
+				  p[2] = j;
+				  j = q[3];
+				  q[3] = p[3];
+				  p[3] = j;
+				  
+			  }
+			  
+			  /* smallval entry is now in position i */
+			  
+			  if (smallval != previouscol)
+			  
+			  {
+				  
+				netindex[previouscol] = (startpos + i) >> 1;
+				  
+				for (j = previouscol + 1; j < smallval; j++) netindex[j] = i;
+				  
+				previouscol = smallval;
+				startpos = i;
+				
+			  }
+			  
+			}
+			
+			netindex[previouscol] = (startpos + maxnetpos) >> 1;
+			for (j = previouscol + 1; j < 256; j++) netindex[j] = maxnetpos; /* really 256 */
+			
+	   }
+	   
+	   /*
+	   * Main Learning Loop ------------------
+	   */
+	   
+	   private function learn():void 
+	   
+	   {
+		   
+		   var i:int;
+		   var j:int;
+		   var b:int;
+		   var g:int
+		   var r:int;
+		   var radius:int;
+		   var rad:int;
+		   var alpha:int;
+		   var step:int;
+		   var delta:int;
+		   var samplepixels:int;
+		   var p:ByteArray;
+		   var pix:int;
+		   var lim:int;
+		   
+		   if (lengthcount < minpicturebytes) samplefac = 1;
+		   
+		   alphadec = 30 + ((samplefac - 1) / 3);
+		   p = thepicture;
+		   pix = 0;
+		   lim = lengthcount;
+		   samplepixels = lengthcount / (3 * samplefac);
+		   delta = samplepixels / ncycles;
+		   alpha = initalpha;
+		   radius = initradius;
+		   
+		   rad = radius >> radiusbiasshift;
+		   if (rad <= 1) rad = 0;
+		   
+		   for (i = 0; i < rad; i++) radpower[i] = alpha * (((rad * rad - i * i) * radbias) / (rad * rad));
+		   
+		   
+		   if (lengthcount < minpicturebytes) step = 3;
+		   
+		   else if ((lengthcount % prime1) != 0) step = 3 * prime1;
+		   
+		   else
+		   
+		   {
+			   
+			   if ((lengthcount % prime2) != 0) step = 3 * prime2;
+			   
+			   else
+			   
+			   {
+				   
+				   if ((lengthcount % prime3) != 0) step = 3 * prime3;
+				   
+				   else step = 3 * prime4;
+				   
+			   }
+			   
+		   }
+		   
+		   i = 0;
+		   
+		   while (i < samplepixels)
+		   
+		   {
+			   
+			   b = (p[pix + 0] & 0xff) << netbiasshift;
+			   g = (p[pix + 1] & 0xff) << netbiasshift;
+			   r = (p[pix + 2] & 0xff) << netbiasshift;
+			   j = contest(b, g, r);
+			   
+			   altersingle(alpha, j, b, g, r);
+			   
+			   if (rad != 0) alterneigh(rad, j, b, g, r); /* alter neighbours */
+			   
+			   pix += step;
+			   
+			   if (pix >= lim) pix -= lengthcount;
+			   
+			   i++;
+			   
+			   if (delta == 0) delta = 1;
+			   
+			   if (i % delta == 0)
+			   
+			   {
+				   
+				   alpha -= alpha / alphadec;
+				   radius -= radius / radiusdec;
+				   rad = radius >> radiusbiasshift;
+				   
+				   if (rad <= 1) rad = 0;
+				   
+				   for (j = 0; j < rad; j++) radpower[j] = alpha * (((rad * rad - j * j) * radbias) / (rad * rad));
+				   
+			   }
+			   
+		   }
+		   
+	   }
+	   
+	   /*
+	   ** Search for BGR values 0..255 (after net is unbiased) and return colour
+	   * index
+	   * ----------------------------------------------------------------------------
+	   */
+	   
+	   public function map(b:int, g:int, r:int):int
+	  
+	   {
+		   
+		   var i:int;
+		   var j:int;
+		   var dist:int
+		   var a:int;
+		   var bestd:int;
+		   var p:Array;
+		   var best:int;
+		   
+		   bestd = 1000; /* biggest possible dist is 256*3 */
+		   best = -1;
+		   i = netindex[g]; /* index on g */
+		   j = i - 1; /* start at netindex[g] and work outwards */
+	
+	    while ((i < netsize) || (j >= 0))
+		
+		{
+			
+			if (i < netsize)
+			
+			{
+				
+				p = network[i];
+				
+				dist = p[1] - g; /* inx key */
+				
+				if (dist >= bestd) i = netsize; /* stop iter */
+				
+				else
+				
+				{
+					
+					i++;
+					
+					if (dist < 0) dist = -dist;
+					
+					a = p[0] - b;
+					
+					if (a < 0) a = -a;
+					
+					dist += a;
+					
+					if (dist < bestd)
+					
+					{
+						
+						a = p[2] - r;
+						
+						if (a < 0) a = -a;
+						
+						dist += a;
+						
+						if (dist < bestd)
+						
+						{
+							
+							bestd = dist;
+							best = p[3];
+							
+						}
+						
+					}
+					
+				}
+				
+			}
+		  
+	      if (j >= 0)
+		  {
+			  
+			  p = network[j];
+			  
+			  dist = g - p[1]; /* inx key - reverse dif */
+			  
+			  if (dist >= bestd) j = -1; /* stop iter */
+			  
+			  else 
+			  {
+				  
+				  j--;
+				  if (dist < 0) dist = -dist;
+				  a = p[0] - b;
+				  if (a < 0) a = -a;
+				  dist += a;
+				  
+				  if (dist < bestd)
+				  
+				  {
+					  
+					  a = p[2] - r;
+					  if (a < 0)a = -a;
+					  dist += a;
+					  if (dist < bestd)
+					  {
+						  bestd = dist;
+						  best = p[3];
+					  }
+					  
+				  }
+				  
+			  }
+			  
+		  }
+		  
+		}
+		
+	    return (best);
+		
+	  }
+	  
+	  public function process():ByteArray
+	  {
+	   
+	    learn();
+	    unbiasnet();
+	    inxbuild();
+	    return colorMap();
+		
+	  }
+	  
+	  /*
+	  * Unbias network to give byte values 0..255 and record position i to prepare
+	  * for sort
+	  * -----------------------------------------------------------------------------------
+	  */
+	  
+	  private function unbiasnet():void
+	  
+	  {
+	
+	    var i:int;
+	    var j:int;
+	
+	    for (i = 0; i < netsize; i++)
+		{
+	      network[i][0] >>= netbiasshift;
+	      network[i][1] >>= netbiasshift;
+	      network[i][2] >>= netbiasshift;
+	      network[i][3] = i; /* record colour no */
+	    }
+		
+	  }
+	  
+	  /*
+	  * Move adjacent neurons by precomputed alpha*(1-((i-j)^2/[r]^2)) in
+	  * radpower[|i-j|]
+	  * ---------------------------------------------------------------------------------
+	  */
+	  
+	  private function alterneigh(rad:int, i:int, b:int, g:int, r:int):void
+	  
+	  {
+		  
+		  var j:int;
+		  var k:int;
+		  var lo:int;
+		  var hi:int;
+		  var a:int;
+		  var m:int;
+		  
+		  var p:Array;
+		  
+		  lo = i - rad;
+		  if (lo < -1) lo = -1;
+		  
+		  hi = i + rad;
+		  
+		  if (hi > netsize) hi = netsize;
+		  
+		  j = i + 1;
+		  k = i - 1;
+		  m = 1;
+		  
+		  while ((j < hi) || (k > lo))
+		  
+		  {
+			  
+			  a = radpower[m++];
+			  
+			  if (j < hi)
+			  
+			  {
+				  
+				  p = network[j++];
+				  
+				  try {
+					  
+					  p[0] -= (a * (p[0] - b)) / alpharadbias;
+					  p[1] -= (a * (p[1] - g)) / alpharadbias;
+					  p[2] -= (a * (p[2] - r)) / alpharadbias;
+					  
+					  } catch (e:Error) {} // prevents 1.3 miscompilation
+					  
+				}
+				
+				if (k > lo)
+				
+				{
+					
+					p = network[k--];
+					
+					try
+					{
+						
+						p[0] -= (a * (p[0] - b)) / alpharadbias;
+						p[1] -= (a * (p[1] - g)) / alpharadbias;
+						p[2] -= (a * (p[2] - r)) / alpharadbias;
+						
+					} catch (e:Error) {}
+					
+				}
+				
+		  }
+		  
+	  }
+	  
+	  /*
+	  * Move neuron i towards biased (b,g,r) by factor alpha
+	  * ----------------------------------------------------
+	  */
+	  
+	  private function altersingle(alpha:int, i:int, b:int, g:int, r:int):void 
+	  {
+		  
+		  /* alter hit neuron */
+		  var n:Array = network[i];
+		  n[0] -= (alpha * (n[0] - b)) / initalpha;
+		  n[1] -= (alpha * (n[1] - g)) / initalpha;
+		  n[2] -= (alpha * (n[2] - r)) / initalpha;
+		
+	  }
+	  
+	  /*
+	  * Search for biased BGR values ----------------------------
+	  */
+	  
+	  private function contest(b:int, g:int, r:int):int
+	  {
+		  
+		  /* finds closest neuron (min dist) and updates freq */
+		  /* finds best neuron (min dist-bias) and returns position */
+		  /* for frequently chosen neurons, freq[i] is high and bias[i] is negative */
+		  /* bias[i] = gamma*((1/netsize)-freq[i]) */
+		  
+		  var i:int;
+		  var dist:int;
+		  var a:int;
+		  var biasdist:int;
+		  var betafreq:int;
+		  var bestpos:int;
+		  var bestbiaspos:int;
+		  var bestd:int;
+		  var bestbiasd:int;
+		  var n:Array;
+		  
+		  bestd = ~(1 << 31);
+		  bestbiasd = bestd;
+		  bestpos = -1;
+		  bestbiaspos = bestpos;
+		  
+		  for (i = 0; i < netsize; i++)
+		  
+		  {
+			  
+			  n = network[i];
+			  dist = n[0] - b;
+			  
+			  if (dist < 0) dist = -dist;
+			  
+			  a = n[1] - g;
+			  
+			  if (a < 0) a = -a;
+			  
+			  dist += a;
+			  
+			  a = n[2] - r;
+			  
+			  if (a < 0) a = -a;
+			  
+			  dist += a;
+			  
+			  if (dist < bestd)
+			  
+			  {
+				  
+				  bestd = dist;
+				  bestpos = i;
+				  
+			  }
+			  
+			  biasdist = dist - ((bias[i]) >> (intbiasshift - netbiasshift));
+			  
+			  if (biasdist < bestbiasd)
+			  
+			  {
+				  
+				  bestbiasd = biasdist;
+				  bestbiaspos = i;
+				  
+			  }
+			  
+			  betafreq = (freq[i] >> betashift);
+			  freq[i] -= betafreq;
+			  bias[i] += (betafreq << gammashift);
+			  
+		  }
+		  
+		  freq[bestpos] += beta;
+		  bias[bestpos] -= betagamma;
+		  return (bestbiaspos);
+		  
+	  }
+	  
+	}
+	
+}
