@@ -153,7 +153,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="25" bitmapSize="500" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -217,7 +218,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="25" bitmapSize="500" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -313,7 +315,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="38" bitmapSize="760" face="方正准圆简体"/>
                                                        </textAttrs>

@@ -41,7 +41,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="center" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -71,13 +72,15 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="12" bitmapSize="240" face="方正准圆简体"/>
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="12" bitmapSize="240" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -89,7 +92,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="12" bitmapSize="240" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -292,7 +296,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="17" bitmapSize="340" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -304,7 +309,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="17" bitmapSize="340" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -334,7 +340,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="17" bitmapSize="340" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -346,7 +353,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="17" bitmapSize="340" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -376,7 +384,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="17" bitmapSize="340" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -388,7 +397,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="17" bitmapSize="340" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -418,7 +428,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="38" bitmapSize="760" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -448,7 +459,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="38" bitmapSize="760" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -478,7 +490,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="38" bitmapSize="760" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -508,7 +521,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="19" bitmapSize="380" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -562,7 +576,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="12" bitmapSize="240" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -660,7 +675,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="31" bitmapSize="620" face="魏碑-简 粗体"/>
                                                        </textAttrs>
@@ -687,7 +703,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="31" bitmapSize="620" face="魏碑-简 粗体"/>
                                                        </textAttrs>
@@ -714,7 +731,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="31" bitmapSize="620" face="魏碑-简 粗体"/>
                                                        </textAttrs>
@@ -741,7 +759,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="31" bitmapSize="620" face="魏碑-简 粗体"/>
                                                        </textAttrs>
@@ -832,7 +851,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="31" bitmapSize="620" face="魏碑-简 粗体"/>
                                                        </textAttrs>
@@ -859,7 +879,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="31" bitmapSize="620" face="魏碑-简 粗体"/>
                                                        </textAttrs>
@@ -934,7 +955,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="25" bitmapSize="500" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -946,7 +968,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="25" bitmapSize="500" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1440,13 +1463,15 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1458,13 +1483,15 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1476,13 +1503,15 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1494,19 +1523,22 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1518,7 +1550,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1530,7 +1563,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1557,7 +1591,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1569,7 +1604,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1581,7 +1617,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1593,7 +1630,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1605,13 +1643,15 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1623,7 +1663,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1635,7 +1676,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1647,13 +1689,15 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1665,7 +1709,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1677,7 +1722,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1689,7 +1735,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1701,7 +1748,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1713,7 +1761,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1725,13 +1774,15 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>
@@ -1743,7 +1794,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="14" bitmapSize="280" face="方正准圆简体"/>
                                                        </textAttrs>

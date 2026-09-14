@@ -531,7 +531,8 @@
       {
          var _loc1_:* = null;
          stage.frameRate = 32;
-         if(SwfRestrict.asWeb(stage.loaderInfo.url,false))
+         // if(SwfRestrict.asWeb(stage.loaderInfo.url,true))
+         if(SwfRestrict.asWeb(stage.loaderInfo.url,false)) //
          {
             this.setSystemRole();
             this.setSystemSkill();

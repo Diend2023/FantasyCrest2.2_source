@@ -14,7 +14,8 @@
                                                   <DOMTextRun>
                                                        <characters>宇波智佐助&#13;</characters>
                                                        <textAttrs>
-                                                            <DOMTextAttrs alignment="center" rotation="true" indent="0.0" leftMargin="0.0" lineSpacing="0.0" rightMargin="0.0" autoKern="false" size="0.0" bitmapSize="0" face="冬青黑体简体中文 W3" fillColor="#f5e3c2" alpha="1.0"/>
+                                                            <!-- <DOMTextAttrs alignment="center" rotation="true" indent="0.0" leftMargin="0.0" lineSpacing="0.0" rightMargin="0.0" autoKern="false" size="0.0" bitmapSize="0" face="冬青黑体简体中文 W3" fillColor="#f5e3c2" alpha="1.0"/> -->
+                                                            <DOMTextAttrs alignment="center" rotation="true" indent="0.0" leftMargin="0.0" lineSpacing="0.0" rightMargin="0.0" autoKern="false" size="18" bitmapSize="360" face="冬青黑体简体中文 W3" fillColor="#f5e3c2" alpha="1.0"/>
                                                        </textAttrs>
                                                   </DOMTextRun>
                                              </textRuns>

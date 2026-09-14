@@ -12,7 +12,8 @@
                                              </matrix>
                                              <textRuns>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="center" rotation="true" indent="0.0" leftMargin="0.0" lineSpacing="0.0" rightMargin="0.0" autoKern="false" size="0.0" bitmapSize="0" face="黑体" fillColor="#ffffff" alpha="1.0"/>
                                                        </textAttrs>

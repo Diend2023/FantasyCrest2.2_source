@@ -18,7 +18,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="35" bitmapSize="700" face="微软雅黑"/>
                                                        </textAttrs>
@@ -45,7 +46,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="35" bitmapSize="700" face="微软雅黑"/>
                                                        </textAttrs>
@@ -104,7 +106,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="10" bitmapSize="200" face="微软雅黑"/>
                                                        </textAttrs>
@@ -131,7 +134,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="26" bitmapSize="520" face="微软雅黑"/>
                                                        </textAttrs>
@@ -183,7 +187,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="26" bitmapSize="520" face="微软雅黑"/>
                                                        </textAttrs>

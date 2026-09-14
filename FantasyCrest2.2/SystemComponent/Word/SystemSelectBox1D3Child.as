@@ -239,7 +239,8 @@ package SystemComponent.Word
                      _loc10_.filters = [new DropShadowFilter(0)];
                      GameData._select_array.push(String(_loc15_.select[_loc17_].role[_loc7_].@head));
                      _loc4_++;
-                     if(_loc15_.select[_loc17_].role[_loc7_]["new"] != undefined)
+                     // if(_loc15_.select[_loc17_].role[_loc7_]["new"] != undefined)
+                     if(_loc15_.select[_loc17_].role[_loc7_].attribute("new").length() > 0) //
                      {
                         _loc12_ = new Bitmap(DataStorage.readImg("Hred" + "New"));
                         this.m_sprite.addChild(_loc12_);

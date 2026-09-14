@@ -36,7 +36,8 @@
                                                   </StrokeStyle>
                                              </strokes>
                                              <edges>
-                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="1" edges="! 4602 4778| 4639 4778| 4639 4858| 4602 4858| 4602 4778"/>
+                                                  <!-- <Edge fillStyle0="1" fillStyle1="0" strokeStyle="1" edges="! 4602 4778| 4639 4778| 4639 4858| 4602 4858| 4602 4778"/> -->
+                                                  <Edge fillStyle0="0" fillStyle1="1" strokeStyle="1" edges="! 4602 4778| 4639 4778| 4639 4858| 4602 4858| 4602 4778"/>
                                              </edges>
                                         </DOMShape>
                                    </elements>
@@ -59,7 +60,8 @@
                                                   </StrokeStyle>
                                              </strokes>
                                              <edges>
-                                                  <Edge fillStyle0="1" fillStyle1="0" strokeStyle="1" edges="! 4602 4778| 9602 4778| 9602 4858| 4602 4858| 4602 4778"/>
+                                                  <!-- <Edge fillStyle0="1" fillStyle1="0" strokeStyle="1" edges="! 4602 4778| 9602 4778| 9602 4858| 4602 4858| 4602 4778"/> -->
+                                                  <Edge fillStyle0="0" fillStyle1="1" strokeStyle="1" edges="! 4602 4778| 9602 4778| 9602 4858| 4602 4858| 4602 4778"/>
                                              </edges>
                                         </DOMShape>
                                    </elements>

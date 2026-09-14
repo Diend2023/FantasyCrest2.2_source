@@ -46,7 +46,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="13" bitmapSize="260" face="微软雅黑"/>
                                                        </textAttrs>
@@ -73,7 +74,8 @@
                                                        </textAttrs>
                                                   </DOMTextRun>
                                                   <DOMTextRun>
-                                                       <characters/>
+                                                       <!-- <characters/> -->
+                                                        <characters>&#13;</characters>
                                                        <textAttrs>
                                                             <DOMTextAttrs alignment="left" rotation="true" indent="0.0" leftMargin="0.0" autoKern="false" lineSpacing="0.0" rightMargin="0.0" size="0" bitmapSize="0" face="迷你简菱心"/>
                                                        </textAttrs>
