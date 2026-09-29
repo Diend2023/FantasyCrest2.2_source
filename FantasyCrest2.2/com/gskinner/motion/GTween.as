@@ -106,7 +106,9 @@ package com.gskinner.motion {
 		/**
 		* Sets the default value of dispatchEvents for new instances.
 		**/
-		public static var defaultDispatchEvents:Boolean=false;
+		// public static var defaultDispatchEvents:Boolean=false;
+
+		public static var defaultDispatchEvents:Boolean=true; //
 		
 		/**
 		* Specifies the default easing function to use with new tweens. Set to GTween.linearEase by default.
@@ -693,6 +695,15 @@ package com.gskinner.motion {
 		public function end():void {
 			position = (repeatCount > 0) ? repeatCount*duration : duration;
 		}
+		
+		// 兼容游戏代码使用的 v1 API（removed 反编译版里有这两个方法）
+		public function play():void { //
+			paused = false; //
+		} //
+		
+		public function pause():void { //
+			paused = true; //
+		} //
 		
 	// Protected Methods:
 		/** @private **/
