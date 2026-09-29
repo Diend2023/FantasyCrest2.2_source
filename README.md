@@ -26,7 +26,7 @@ FantasyCrest2.2_source/
 - **gskinner** - [GTween](https://github.com/gskinner/GTween)
 - **spjwebster** - [as3base64](https://github.com/spjwebster/as3base64)
 - **claus** - [fzip](https://github.com/claus/fzip)
-- **CovertLab** - [NetworkPainter](https://github.com/CovertLab/NetworkPainter/tree/master/src/org/gif)
+- **[Thibault Imbert]( http://www.bytearray.org/?p=95)** - [as3gif(GIFPlayer 0.4)](https://code.google.com/archive/p/as3gif/)
 - **mrdoob** - [Hi-ReS-Stats](https://github.com/mrdoob/Hi-ReS-Stats)
 - **superkaka** - [Fps](https://github.com/linchenrr/flash/blob/master/project/KLib/src/org/superkaka/KLib/debug/Fps.as)
 
